@@ -1,4 +1,4 @@
-[![MIT License](https://img.shields.io/github/license/LombardiDaniel/Sebotiao.svg?style=flat-square)](LICENSE)
+[![MIT License](https://img.shields.io/github/license/LombardiDaniel/Sebotiao.svg?style=flat-square)](LICENSE.md)
 
 <br />
 <p align="center">
