@@ -58,7 +58,7 @@ Pessoalmente, recomendo que utilize docker. Nesse caso, utilize o [docker-compos
 
 De forma geral, o arquivo `src/run.py` roda o bot, utilizando os arquivos da pasta `cog` (leia mais sobre cogs [aqui](https://discordpy.readthedocs.io/en/latest/ext/commands/cogs.html)). As interações com a database são feitas pelo arquivo `src/utils/dbManager.py`, que simplifica o acesso utilizando a biblioteca sqlalchemy. Os modelos para criação das tabelas ficam no arquivo `src/models.py`.
 
-As chaves de acesso para database e o token do bot do discord devem ser providenciados (gerados) por você. As variáveis de ambiente que o container bot precisa são:
+As variáveis de ambiente que o container bot precisa são:
 
 | Nome da Variável | Significado                                                                                                                                                |      Obrigatória     |
 | :--------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------: |
@@ -66,12 +66,16 @@ As chaves de acesso para database e o token do bot do discord devem ser providen
 |      DB_HOST     | IP (ou nome do container) da localidade da database                                                                                                        | [X] |
 |       DEBUG      | Se `0`, a database será SQLite no próprio diretório (único container docker); se `1`, é necessário um segundo container, contendo uma database PostgreSQL. | [  ] |
 
+As variáveis de ambiente que o container da database precisa são:
+
 |  Nome da Variável | Significado                                                               |      Obrigatória     |
 | :---------------: | ------------------------------------------------------------------------- | :------------------: |
 |    POSTGRES_DB    | Nome da database para ser criada                                          | [X] |
 |   POSTGRES_USER   | Nome do usuário para ser criado (terá privilégios máximos em POSTGRES_DB) | [X] |
 | POSTGRES_PASSWORD | Senha para o acesso do usuário POSTGRES_USER                              | [X] |
 |   POSTGRES_PORT   | Porta em que a database será hosteada                                     | [X] |
+
+As chaves de acesso para database e o token do bot do discord devem ser providenciados (gerados) por você.
 
 Crie um bot [por aqui](https://discord.com/developers/applications/) e lembre-se de permitir acesso de administrador e habilitar [intents](https://discordpy.readthedocs.io/en/latest/intents.html).
 
