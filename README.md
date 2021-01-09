@@ -65,16 +65,16 @@ As chaves de acesso para database e o token do bot do discord devem ser providen
 
 | Nome da Variável | Significado                                                                                                                                                |           Obrigatória           |
 | :--------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | :-----------------------------: |
-|     BOT_TOKEN    | Token do bot (disponibilizado pelo discord)                                                                                                                | <input type="checkbox" checked> |
-|      DB_HOST     | IP (ou nome do container) da localidade da database                                                                                                        | <input type="checkbox" checked> |
-|       DEBUG      | Se `0`, a database será SQLite no próprio diretório (único container docker); se `1`, é necessário um segundo container, contendo uma database PostgreSQL. |     <input type="checkbox" >    |
+|     BOT_TOKEN    | Token do bot (disponibilizado pelo discord)                                                                                                                | <ul><li>[x]</li><li> |
+|      DB_HOST     | IP (ou nome do container) da localidade da database                                                                                                        | <ul><li>[x]</li><li> |
+|       DEBUG      | Se `0`, a database será SQLite no próprio diretório (único container docker); se `1`, é necessário um segundo container, contendo uma database PostgreSQL. |     <ul><li>[ ]</li><li>    |
 
 |  Nome da Variável | Significado                                                               |           Obrigatória           |
 | :---------------: | ------------------------------------------------------------------------- | :-----------------------------: |
-|    POSTGRES_DB    | Nome da database para ser criada                                          | <input type="checkbox" checked> |
-|   POSTGRES_USER   | Nome do usuário para ser criado (terá privilégios máximos em POSTGRES_DB) | <input type="checkbox" checked> |
-| POSTGRES_PASSWORD | Senha para o acesso do usuário POSTGRES_USER                              | <input type="checkbox" checked> |
-|   POSTGRES_PORT   | Porta em que a database será hosteada                                     | <input type="checkbox" checked> |
+|    POSTGRES_DB    | Nome da database para ser criada                                          | <ul><li>[x]</li><li> |
+|   POSTGRES_USER   | Nome do usuário para ser criado (terá privilégios máximos em POSTGRES_DB) | <ul><li>[x]</li><li> |
+| POSTGRES_PASSWORD | Senha para o acesso do usuário POSTGRES_USER                              | <ul><li>[x]</li><li> |
+|   POSTGRES_PORT   | Porta em que a database será hosteada                                     | <ul><li>[x]</li><li> |
 
 Crie um bot [por aqui](https://discord.com/developers/applications/) e lembre-se de permitir acesso de administrador e habilitar [intents](https://discordpy.readthedocs.io/en/latest/intents.html).
 
