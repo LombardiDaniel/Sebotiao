@@ -1,0 +1,19 @@
+# Virtual Env
+/venv
+
+# Environment Variables
+*.env
+*.env.*
+
+# MacOS Files
+*.DS_Store
+
+# Byte-compiled
+*/__pycache__/
+*.py[cod]
+
+# Logs
+*.log
+
+# send_to_srv
+copy_to_pi.sh

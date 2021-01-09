@@ -1,0 +1,12 @@
+# Virtual Env
+/venv
+
+# MacOS Files
+*.DS_Store
+
+# Byte-compiled
+*/__pycache__/
+*.py[cod]
+
+# Logs
+*.log
