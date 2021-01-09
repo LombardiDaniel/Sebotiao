@@ -10,6 +10,6 @@
   <p align="center">
     O AutoMod do discord que parece aquele tioão do zap.
     <br />
-    <a href="https://discord.com/api/oauth2/authorize?client_id=795344842305175593&permissions=8&scope=bot"><strong>Coloque-o em seu servidor »</strong></a>
+    <a target="_blank" href="https://discord.com/api/oauth2/authorize?client_id=795344842305175593&permissions=8&scope=bot"><strong>Coloque-o em seu servidor »</strong></a>
   </p>
 </p>
