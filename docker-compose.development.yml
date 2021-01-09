@@ -12,3 +12,8 @@ services:
             - ./env/.env.db
         environment:
             - DEGUB="1"
+        volumes:
+            - dev_bot_db:/src/sqlite.db
+
+volumes:
+    - dev_bot_db
