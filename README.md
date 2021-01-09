@@ -1,6 +1,4 @@
-
 [![MIT License](https://img.shields.io/github/license/LombardiDaniel/Sebotiao.svg?style=flat-square)](LICENSE)
-
 
 <br />
 <p align="center">
@@ -26,7 +24,6 @@
     -   [Organização do Projeto](#organização-do-projeto)
 -   [Roadmap](#roadmap)
 -   [License](#license)
-
 
 ### Sobre o Projeto
 
@@ -63,21 +60,21 @@ De forma geral, o arquivo `src/run.py` roda o bot, utilizando os arquivos da pas
 
 As chaves de acesso para database e o token do bot do discord devem ser providenciados (gerados) por você. As variáveis de ambiente que o container bot precisa são:
 
-| Nome da Variável | Significado                                                                                                                                                |           Obrigatória           |
-| :--------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | :-----------------------------: |
-|     BOT_TOKEN    | Token do bot (disponibilizado pelo discord)                                                                                                                | <ul><li>[x]</li><li> |
-|      DB_HOST     | IP (ou nome do container) da localidade da database                                                                                                        | <ul><li>[x]</li><li> |
-|       DEBUG      | Se `0`, a database será SQLite no próprio diretório (único container docker); se `1`, é necessário um segundo container, contendo uma database PostgreSQL. |     <ul><li>[ ]</li><li>    |
+| Nome da Variável | Significado                                                                                                                                                |      Obrigatória     |
+| :--------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------: |
+|     BOT_TOKEN    | Token do bot (disponibilizado pelo discord)                                                                                                                | [X] |
+|      DB_HOST     | IP (ou nome do container) da localidade da database                                                                                                        | [X] |
+|       DEBUG      | Se `0`, a database será SQLite no próprio diretório (único container docker); se `1`, é necessário um segundo container, contendo uma database PostgreSQL. | [ ] |
 
-|  Nome da Variável | Significado                                                               |           Obrigatória           |
-| :---------------: | ------------------------------------------------------------------------- | :-----------------------------: |
-|    POSTGRES_DB    | Nome da database para ser criada                                          | <ul><li>[x]</li><li> |
-|   POSTGRES_USER   | Nome do usuário para ser criado (terá privilégios máximos em POSTGRES_DB) | <ul><li>[x]</li><li> |
-| POSTGRES_PASSWORD | Senha para o acesso do usuário POSTGRES_USER                              | <ul><li>[x]</li><li> |
-|   POSTGRES_PORT   | Porta em que a database será hosteada                                     | <ul><li>[x]</li><li> |
+|  Nome da Variável | Significado                                                               |      Obrigatória     |
+| :---------------: | ------------------------------------------------------------------------- | :------------------: |
+|    POSTGRES_DB    | Nome da database para ser criada                                          | [X] |
+|   POSTGRES_USER   | Nome do usuário para ser criado (terá privilégios máximos em POSTGRES_DB) | [X] |
+| POSTGRES_PASSWORD | Senha para o acesso do usuário POSTGRES_USER                              | [X] |
+|   POSTGRES_PORT   | Porta em que a database será hosteada                                     | [X] |
 
 Crie um bot [por aqui](https://discord.com/developers/applications/) e lembre-se de permitir acesso de administrador e habilitar [intents](https://discordpy.readthedocs.io/en/latest/intents.html).
 
-
 ### License
+
 Este projeto está sob a Licença MIT - veja o arquivo [LICENSE.md](LICENSE.md) para detalhes.
