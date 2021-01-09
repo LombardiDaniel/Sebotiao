@@ -3,7 +3,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/LombardiDaniel/Sebotiao">
-    <img src="https://cdn.discordapp.com/app-icons/795344842305175593/a32c898e385d311eafbd52c8c0a7216e.png?size=256" alt="Logo" width="80" height="80">
+    <img src="https://cdn.discordapp.com/app-icons/795344842305175593/a32c898e385d311eafbd52c8c0a7216e.png?size=256" alt="Logo" width="180" height="180">
   </a>
 
   <h3 align="center">Sebotião</h3>
@@ -60,20 +60,20 @@ De forma geral, o arquivo `src/run.py` roda o bot, utilizando os arquivos da pas
 
 As variáveis de ambiente que o container bot precisa são:
 
-| Nome da Variável | Significado                                                                                                                                                |      Obrigatória     |
-| :--------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------: |
-|     BOT_TOKEN    | Token do bot (disponibilizado pelo discord)                                                                                                                | [X] |
-|      DB_HOST     | IP (ou nome do container) da localidade da database                                                                                                        | [X] |
-|       DEBUG      | Se `0`, a database será SQLite no próprio diretório (único container docker); se `1`, é necessário um segundo container, contendo uma database PostgreSQL. | [  ] |
+| Nome da Variável | Significado                                                                                                                                                | Obrigatória |
+| :--------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------: |
+|     BOT_TOKEN    | Token do bot (disponibilizado pelo discord)                                                                                                                |     [X]     |
+|      DB_HOST     | IP (ou nome do container) da localidade da database                                                                                                        |     [X]     |
+|       DEBUG      | Se `0`, a database será SQLite no próprio diretório (único container docker); se `1`, é necessário um segundo container, contendo uma database PostgreSQL. |     [  ]    |
 
 As variáveis de ambiente que o container da database precisa são:
 
-|  Nome da Variável | Significado                                                               |      Obrigatória     |
-| :---------------: | ------------------------------------------------------------------------- | :------------------: |
-|    POSTGRES_DB    | Nome da database para ser criada                                          | [X] |
-|   POSTGRES_USER   | Nome do usuário para ser criado (terá privilégios máximos em POSTGRES_DB) | [X] |
-| POSTGRES_PASSWORD | Senha para o acesso do usuário POSTGRES_USER                              | [X] |
-|   POSTGRES_PORT   | Porta em que a database será hosteada                                     | [X] |
+|  Nome da Variável | Significado                                                               | Obrigatória |
+| :---------------: | ------------------------------------------------------------------------- | :---------: |
+|    POSTGRES_DB    | Nome da database para ser criada                                          |     [X]     |
+|   POSTGRES_USER   | Nome do usuário para ser criado (terá privilégios máximos em POSTGRES_DB) |     [X]     |
+| POSTGRES_PASSWORD | Senha para o acesso do usuário POSTGRES_USER                              |     [X]     |
+|   POSTGRES_PORT   | Porta em que a database será hosteada                                     |     [X]     |
 
 As chaves de acesso para database e o token do bot do discord devem ser providenciados (gerados) por você.
 
