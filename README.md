@@ -64,7 +64,7 @@ As chaves de acesso para database e o token do bot do discord devem ser providen
 | :--------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------: |
 |     BOT_TOKEN    | Token do bot (disponibilizado pelo discord)                                                                                                                | [X] |
 |      DB_HOST     | IP (ou nome do container) da localidade da database                                                                                                        | [X] |
-|       DEBUG      | Se `0`, a database será SQLite no próprio diretório (único container docker); se `1`, é necessário um segundo container, contendo uma database PostgreSQL. | [ ] |
+|       DEBUG      | Se `0`, a database será SQLite no próprio diretório (único container docker); se `1`, é necessário um segundo container, contendo uma database PostgreSQL. | [  ] |
 
 |  Nome da Variável | Significado                                                               |      Obrigatória     |
 | :---------------: | ------------------------------------------------------------------------- | :------------------: |
