@@ -62,18 +62,18 @@ As variáveis de ambiente que o container bot precisa são:
 
 | Nome da Variável | Significado                                                                                                                                                | Obrigatória |
 | :--------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------: |
-|     BOT_TOKEN    | Token do bot (disponibilizado pelo discord)                                                                                                                |     [X]     |
-|      DB_HOST     | IP (ou nome do container) da localidade da database                                                                                                        |     [X]     |
-|       DEBUG      | Se `0`, a database será SQLite no próprio diretório (único container docker); se `1`, é necessário um segundo container, contendo uma database PostgreSQL. |     [  ]    |
+|     BOT_TOKEN    | Token do bot (disponibilizado pelo discord)                                                                                                                |     Sim     |
+|      DB_HOST     | IP (ou nome do container) da localidade da database                                                                                                        |     Sim     |
+|       DEBUG      | Se `0`, a database será SQLite no próprio diretório (único container docker); se `1`, é necessário um segundo container, contendo uma database PostgreSQL. |     Não    |
 
 As variáveis de ambiente que o container da database precisa são:
 
 |  Nome da Variável | Significado                                                               | Obrigatória |
 | :---------------: | ------------------------------------------------------------------------- | :---------: |
-|    POSTGRES_DB    | Nome da database para ser criada                                          |     [X]     |
-|   POSTGRES_USER   | Nome do usuário para ser criado (terá privilégios máximos em POSTGRES_DB) |     [X]     |
-| POSTGRES_PASSWORD | Senha para o acesso do usuário POSTGRES_USER                              |     [X]     |
-|   POSTGRES_PORT   | Porta em que a database será hosteada                                     |     [X]     |
+|    POSTGRES_DB    | Nome da database para ser criada                                          |     Sim     |
+|   POSTGRES_USER   | Nome do usuário para ser criado (terá privilégios máximos em POSTGRES_DB) |     Sim     |
+| POSTGRES_PASSWORD | Senha para o acesso do usuário POSTGRES_USER                              |     Sim     |
+|   POSTGRES_PORT   | Porta em que a database será hosteada                                     |     Sim     |
 
 As chaves de acesso para database e o token do bot do discord devem ser providenciados (gerados) por você.
 
