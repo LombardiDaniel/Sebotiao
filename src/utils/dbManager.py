@@ -3,7 +3,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from models import AdminOptions, Streamer
+from models import AdminOptions
 from run import Base
 
 from utils.docker import docker_log
@@ -58,6 +58,7 @@ class dbStreamManager(dbManager):
         session.close()
 
 
+
 class dbAutoMod(dbManager):
 
     def update_default_role(self, default_role_id: int):
@@ -96,12 +97,12 @@ class dbAutoMod(dbManager):
         session.close()
 
 
-    def add_banned_words(self, words):
+    def add_cursed_words(self, words):
         '''
-        Adds/Updates the current list of banned words.
+        Adds/Updates the current list of cursed words.
 
         Args:
-            - words (lst): List of words to add to banned_words.
+            - words (lst): List of words to add to cursed_words.
 
         Returns:
             None.
@@ -114,29 +115,29 @@ class dbAutoMod(dbManager):
 
         # if there are already entries for this guild, updates them
         if guild_query.count():
-            if guild_query[-1].banned_words:
+            if guild_query[-1].cursed_words:
                 guild_query[-1].\
-                    banned_words = ','.join(words + guild_query[-1].banned_words.split(','))
+                    cursed_words = ','.join(words + guild_query[-1].cursed_words.split(','))
                 session.commit()
             else:
-                guild_query[-1].banned_words = ','.join(words)
+                guild_query[-1].cursed_words = ','.join(words)
                 session.commit()
         # if there are no entries for this guild, creates entry
         else:
             admin_options = AdminOptions()
             admin_options.guild_id = self.guild_id
-            admin_options.banned_words = ','.join(words)
+            admin_options.cursed_words = ','.join(words)
             session.add(admin_options)
             session.commit()
 
         session.close()
 
-    def remove_banned_words(self, words):
+    def remove_cursed_words(self, words):
         '''
-        Removes the current list of banned words.
+        Removes the current list of cursed words.
 
         Args:
-            - words (lst): List of words to remove from banned_words.
+            - words (lst): List of words to remove from cursed_words.
 
         Returns:
             None.
@@ -149,17 +150,17 @@ class dbAutoMod(dbManager):
 
         # if there are already entries for this guild, updates them
         if guild_query.count():
-            if guild_query[-1].banned_words:
+            if guild_query[-1].cursed_words:
 
                 # Removes words
-                curr_words = guild_query[-1].banned_words.split(',')
+                curr_words = guild_query[-1].cursed_words.split(',')
                 for word in words:
                     if word in curr_words:
                         curr_words.remove(word)
 
                 # Updates table
                 guild_query[-1].\
-                    banned_words = ','.join(curr_words)
+                    cursed_words = ','.join(curr_words)
                 session.commit()
 
 
@@ -192,7 +193,7 @@ class dbAutoMod(dbManager):
 
 
     @property
-    def banned_words(self):
+    def cursed_words(self):
         '''
         Gets the default role for new users from database.
 
@@ -200,7 +201,7 @@ class dbAutoMod(dbManager):
             None.
 
         Returns:
-            - banned_words (lst): List of all banned words stored in db.
+            - cursed_words (lst): List of all cursed words stored in db.
 
         '''
 
@@ -213,7 +214,7 @@ class dbAutoMod(dbManager):
 
         if not admin_options.count():
             return ["sem configuração"]
-        if not admin_options[-1].banned_words:
+        if not admin_options[-1].cursed_words:
             return ["nenhuma palavra banida"]
 
-        return admin_options[-1].banned_words.split(',')
+        return admin_options[-1].cursed_words.split(',')

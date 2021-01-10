@@ -1,4 +1,3 @@
-import re
 from random import choice
 
 import discord
@@ -6,7 +5,7 @@ from discord.ext import commands
 
 
 from utils.docker import docker_log
-from utils.dbManager import dbAutoMod, dbStreamManager
+from utils.dbManager import dbAutoMod
 from utils.decorators import admin_only
 from extras import constants
 from extras.messages import MessageFormater
@@ -34,30 +33,6 @@ class AutoModerator(commands.Cog):
         docker_log(
             f'Logged-in on {len(self.client.guilds)}, at the reach of {usr_num} users')
 
-        # Sends greet to general channel
-        msg_sent = False
-        for channel in self.client.get_all_channels():
-            if 'general' in channel.name:
-                general_channel = self.client.get_channel(channel.id)
-                await general_channel.send(f'Salve salve, meu lindo povo do {channel.guild.name}.')
-                msg_sent = True
-                break
-
-        if not msg_sent:
-            first_channel = self.client.get_all_channels()[0]
-            await first_channel.send(f'Salve salve, meu lindo povo do {first_channel.guild.name}.')
-            msg_sent = True
-
-        # Tries to reach the first text_channel of the guild that the bot has send_messages perms
-        if not msg_sent:
-            bot_user = self.client.get_user(self.client.user.id)
-            for channel in self.client.get_all_channels():
-                channel_perms = channel.permissions_for(bot_user)
-                if channel_perms.send_messages:
-                    channel = self.client.get_channel(channel.id)
-                    await channel.send(f'Salve salve, meu lindo povo do {channel.guild.name}.')
-                    msg_sent = True
-                    break
 
         await self.client.change_presence(activity=discord.Game(name='Truco com o Wanderley'))
 
@@ -70,7 +45,6 @@ class AutoModerator(commands.Cog):
         command).
         '''
         await ctx.channel.send(MessageFormater.ajuda())
-
 
 
 
@@ -90,51 +64,52 @@ class AutoModerator(commands.Cog):
         mod.update_default_role(role.id)
 
         docker_log(
-            f'{ctx.guild.id} - {ctx.message.author.name} set default role as {our_input}')
+            f'{ctx.guild.id} - {ctx.message.author.name} set default role as {role}')
         await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
 
 
 
-    @commands.command(name='list_banned_words')
+    @commands.command(name='list_cursed_words')
     @commands.guild_only()
-    async def list_banned_words(self, ctx):
+    async def list_cursed_words(self, ctx):
         '''
-        Lists all banned words from guild.
+        Lists all cursed words from guild.
         '''
 
         mod = dbAutoMod(ctx.guild.id)
 
-        for word in mod.banned_words:
+        for word in mod.cursed_words:
             await ctx.message.channel.send(word)
 
 
 
-    @commands.command(name='set_banned_word', aliases=[
-        'set_banned_words', 'add_banned_words', 'add_banned_word'
+    @commands.command(name='set_cursed_word', aliases=[
+        'set_cursed_words', 'add_cursed_words', 'add_cursed_word'
     ])
     @commands.guild_only()
     @admin_only
-    async def set_banned_words(self, ctx, our_input, *args, **kwargs):
+    async def set_cursed_words(self, ctx, our_input, *args, **kwargs):
         '''
-        Sets the banned words. (curse-?)
+        Sets the cursed words. (curse-?)
         '''
 
         words = our_input.split(',')
 
         mod = dbAutoMod(ctx.guild.id)
-        mod.add_banned_words(words)
+        mod.add_cursed_words(words)
 
         docker_log(
-            f'{ctx.guild.id} - {ctx.message.author.name} added banned word(s): {our_input}')
+            f'{ctx.guild.id} - {ctx.message.author.name} added cursed word(s): {our_input}')
         await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
 
 
-    @commands.command(name='unban_word', aliases=[
-        'unban_words', 'remove_banned_word', 'remove_banned_words'
+
+    @commands.command(name='uncurse_word', aliases=[
+        'uncurse_words', 'remove_cursed_word', 'remove_cursed_words'
     ])
     @commands.guild_only()
     @admin_only
-    async def remove_banned_words(self, ctx, our_input, *args, **kwargs):
+    async def remove_cursed_words(self, ctx, our_input, *args, **kwargs):
         '''
         Unban words.
         '''
@@ -142,10 +117,10 @@ class AutoModerator(commands.Cog):
         words = our_input.split(',')
 
         mod = dbAutoMod(ctx.guild.id)
-        mod.remove_banned_words(words)
+        mod.remove_cursed_words(words)
 
         docker_log(
-            f'{ctx.guild.id} - {ctx.message.author.name} removed banned word(s): {our_input}')
+            f'{ctx.guild.id} - {ctx.message.author.name} removed cursed word(s): {our_input}')
         await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
 
 
@@ -165,10 +140,10 @@ class AutoModerator(commands.Cog):
             choice(constants.RESPOSTA_CHINGO)
             await message.channel.send(choice(constants.RESPOSTA_CHINGO))
 
-        # banned_words
+        # cursed_words
         mod = dbAutoMod(message.guild.id)
-        if any(word in message.content.lower().split() for word in mod.banned_words):
-            await message.channel.send(MessageFormater.banned_words_msg(message.author.id))
+        if any(word in message.content.lower().split() for word in mod.cursed_words):
+            await message.channel.send(MessageFormater.cursed_words_msg(message.author.id))
 
 
 
@@ -177,7 +152,6 @@ class AutoModerator(commands.Cog):
         '''
         When a member joins.
         '''
-        print('entrou')
         mod = dbAutoMod(member.guild.id)
         def_role = discord.utils.get(member.guild.roles, id=mod.default_role)
 
