@@ -10,6 +10,8 @@ class Colours:
     soft_red = 0xcd6d6d
     yellow = 0xf9f586
 
+COMMAND_PREFIXES = ['tiao ', 'ei ', 'psiu ']
+
 RESPOSTA_CHINGO = [
     "Bolsonaro e seus familiares.estam trabalhando o melhor que podem.nao julgue para nao ser julgado BOM DIA",
     "Não conheço um eleitor do Bolsonaro que esteja arrependido, pelo contrário, já iniciamos a campanha para 2022. É o melhor presidente de todos os tempos.",

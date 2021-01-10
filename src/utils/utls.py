@@ -1,10 +1,11 @@
 import discord
 from discord.ext import commands
+from extras.constants import COMMAND_PREFIXES
 
 def get_prefix(client, message):
     """A callable Prefix for our client. This could be edited to allow per server prefixes."""
 
-    prefixes = ['tiao ', 'ei ', 'psiu ']
+    prefixes = COMMAND_PREFIXES
 
     # Check to see if we are outside of a guild. e.g DM's etc.
     if not message.guild:

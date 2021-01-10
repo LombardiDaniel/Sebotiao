@@ -135,10 +135,9 @@ class AutoModerator(commands.Cog):
         if message.author.bot:
             return
 
-        # bozo xingo
-        if any(word in message.content.lower() for word in constants.BOZO_CHINGO_TRIGGERS):
-            choice(constants.RESPOSTA_CHINGO)
-            await message.channel.send(choice(constants.RESPOSTA_CHINGO))
+        # Cancels the request if the mwessage sent was a command.
+        if any(word in message.content for word in constants.COMMAND_PREFIXES):
+            return
 
         # cursed_words
         mod = dbAutoMod(message.guild.id)
