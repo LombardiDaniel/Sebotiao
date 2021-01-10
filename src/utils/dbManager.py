@@ -33,29 +33,29 @@ class dbManager:
 
 
 
-class dbStreamManager(dbManager):
-
-    def add_streamer(self, disc_id, twitch_url):
-        '''
-        Adds a streamer to the database.
-
-        Args:
-            - disc_id (int): ID of the user that created the request.
-            - twitch_url (str): URL of the live-stream from twitch.
-
-        Returns:
-            None.
-
-        '''
-        session = self.session()
-
-        streamer = Streamer()
-        streamer.guild_id = self.guild_id
-        streamer.disc_id = str(disc_id)
-        streamer.twitch_url = twitch_url
-
-        session.add(streamer)
-        session.close()
+# class dbStreamManager(dbManager):
+#
+#     def add_streamer(self, disc_id, twitch_url):
+#         '''
+#         Adds a streamer to the database.
+#
+#         Args:
+#             - disc_id (int): ID of the user that created the request.
+#             - twitch_url (str): URL of the live-stream from twitch.
+#
+#         Returns:
+#             None.
+#
+#         '''
+#         session = self.session()
+#
+#         streamer = Streamer()
+#         streamer.guild_id = self.guild_id
+#         streamer.disc_id = str(disc_id)
+#         streamer.twitch_url = twitch_url
+#
+#         session.add(streamer)
+#         session.close()
 
 
 
