@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String
 from run import Base
 
 
-
 class AdminOptions(Base):
     '''
     Admin Model for storage of automod settings.
@@ -20,7 +19,6 @@ class AdminOptions(Base):
     id = Column('id', Integer, primary_key=True)
     default_role_id = Column('default_role_id', String(100), nullable=True)
     cursed_words = Column('cursed_words', String(500), nullable=True)
-
 
 
 # class Streamer(Base):

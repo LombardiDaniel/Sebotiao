@@ -4,8 +4,8 @@ Creates the formated messages to be sent on to the discord.
 
 '''
 
-from discord import Embed
-from extras.constants import Colours
+# from discord import Embed
+# from extras.constants import Colours
 
 
 class MessageFormater:
@@ -36,7 +36,6 @@ class MessageFormater:
         The reply when someone says a cursed word.
         '''
         return f'Aqui nois nao usa esses termo nao blz.Fas o favor <@{user_id}> obrigado .'
-
 
     # @staticmethod
     # def stream_notification(user_id, twitch_url):

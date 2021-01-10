@@ -1,12 +1,13 @@
 from random import choice
 
-import discord
+# import discord
 from discord.ext import commands
 
 
-from utils.docker import docker_log
+# from utils.docker import docker_log
 from extras import constants
-from extras.messages import MessageFormater
+# from extras.messages import MessageFormater
+
 
 class TiozaoZap(commands.Cog):
     '''
@@ -15,7 +16,6 @@ class TiozaoZap(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-
 
     @commands.Cog.listener()
     @commands.guild_only()
@@ -31,7 +31,6 @@ class TiozaoZap(commands.Cog):
         if any(word in message.content.lower() for word in constants.BOZO_CHINGO_TRIGGERS):
             choice(constants.RESPOSTA_CHINGO)
             await message.channel.send(choice(constants.RESPOSTA_CHINGO))
-
 
 
 def setup(client):

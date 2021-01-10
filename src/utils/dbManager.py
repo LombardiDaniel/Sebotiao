@@ -6,7 +6,6 @@ from sqlalchemy.orm import sessionmaker
 from models import AdminOptions
 from run import Base
 
-from utils.docker import docker_log
 
 class dbManager:
     '''
@@ -32,7 +31,6 @@ class dbManager:
         self.session = sessionmaker(bind=self.engine)
 
 
-
 # class dbStreamManager(dbManager):
 #
 #     def add_streamer(self, disc_id, twitch_url):
@@ -56,7 +54,6 @@ class dbManager:
 #
 #         session.add(streamer)
 #         session.close()
-
 
 
 class dbAutoMod(dbManager):
@@ -96,7 +93,6 @@ class dbAutoMod(dbManager):
 
         session.close()
 
-
     def add_cursed_words(self, words):
         '''
         Adds/Updates the current list of cursed words.
@@ -117,7 +113,8 @@ class dbAutoMod(dbManager):
         if guild_query.count():
             if guild_query[-1].cursed_words:
                 guild_query[-1].\
-                    cursed_words = ','.join(words + guild_query[-1].cursed_words.split(','))
+                    cursed_words = ','.join(
+                        words + guild_query[-1].cursed_words.split(','))
                 session.commit()
             else:
                 guild_query[-1].cursed_words = ','.join(words)
@@ -163,7 +160,6 @@ class dbAutoMod(dbManager):
                     cursed_words = ','.join(curr_words)
                 session.commit()
 
-
     @property
     def default_role(self):
         '''
@@ -190,7 +186,6 @@ class dbAutoMod(dbManager):
             return None
 
         return admin_options[-1].default_role_id
-
 
     @property
     def cursed_words(self):

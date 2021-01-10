@@ -10,6 +10,7 @@ from utils.decorators import admin_only
 from extras import constants
 from extras.messages import MessageFormater
 
+
 class AutoModerator(commands.Cog):
     '''
     AutoModerator Cogs
@@ -17,8 +18,6 @@ class AutoModerator(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-
-
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -33,10 +32,7 @@ class AutoModerator(commands.Cog):
         docker_log(
             f'Logged-in on {len(self.client.guilds)}, at the reach of {usr_num} users')
 
-
         await self.client.change_presence(activity=discord.Game(name='Truco com o Wanderley'))
-
-
 
     @commands.command(name='ajuda', aliases=['ajuda noix'])
     async def ajuda(self, ctx, *args, **kwargs):
@@ -45,8 +41,6 @@ class AutoModerator(commands.Cog):
         command).
         '''
         await ctx.channel.send(MessageFormater.ajuda())
-
-
 
     @commands.command(name='set_default_role', aliases=[
         'set_def_role', 'update_def_role', 'update_default_role'
@@ -67,8 +61,6 @@ class AutoModerator(commands.Cog):
             f'{ctx.guild.id} - {ctx.message.author.name} set default role as {role}')
         await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
 
-
-
     @commands.command(name='list_cursed_words')
     @commands.guild_only()
     async def list_cursed_words(self, ctx):
@@ -80,8 +72,6 @@ class AutoModerator(commands.Cog):
 
         for word in mod.cursed_words:
             await ctx.message.channel.send(word)
-
-
 
     @commands.command(name='set_cursed_word', aliases=[
         'set_cursed_words', 'add_cursed_words', 'add_cursed_word'
@@ -102,8 +92,6 @@ class AutoModerator(commands.Cog):
             f'{ctx.guild.id} - {ctx.message.author.name} added cursed word(s): {our_input}')
         await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
 
-
-
     @commands.command(name='uncurse_word', aliases=[
         'uncurse_words', 'remove_cursed_word', 'remove_cursed_words'
     ])
@@ -122,8 +110,6 @@ class AutoModerator(commands.Cog):
         docker_log(
             f'{ctx.guild.id} - {ctx.message.author.name} removed cursed word(s): {our_input}')
         await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
-
-
 
     @commands.Cog.listener()
     @commands.guild_only()
@@ -144,8 +130,6 @@ class AutoModerator(commands.Cog):
         if any(word in message.content.lower().split() for word in mod.cursed_words):
             await message.channel.send(MessageFormater.cursed_words_msg(message.author.id))
 
-
-
     @commands.Cog.listener()
     async def on_member_join(self, member):
         '''
@@ -156,8 +140,8 @@ class AutoModerator(commands.Cog):
 
         if def_role is not None:
             await member.add_roles(def_role)
-            docker_log(f'AutoMod set autoRole for {member.id} @ {member.guild.id}')
-
+            docker_log(
+                f'AutoMod set autoRole for {member.id} @ {member.guild.id}')
 
 
 def setup(client):
