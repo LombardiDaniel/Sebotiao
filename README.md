@@ -2,8 +2,8 @@
 
 <br />
 <p align="center">
-  <a href="https://github.com/LombardiDaniel/Sebotiao">
-    <img src="https://cdn.discordapp.com/app-icons/795344842305175593/a32c898e385d311eafbd52c8c0a7216e.png?size=256" alt="Logo" width="180" height="180">
+  <a href="https://discord.com/api/oauth2/authorize?client_id=795344842305175593&permissions=8&scope=bot">
+    <img src="LOGO.png" alt="LOGO" width="200" height="200">
   </a>
 
   <h3 align="center">Sebotião</h3>
