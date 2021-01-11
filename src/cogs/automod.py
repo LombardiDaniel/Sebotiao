@@ -61,6 +61,30 @@ class AutoModerator(commands.Cog):
             f'{ctx.guild.id} - {ctx.message.author.name} set default role as {role}')
         await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
 
+    @commands.command(name='set_no_role_as_default', aliases=[
+        'set_no_role_as_def', 'set_norole_as_def', 'set_norole_as_default'
+    ])
+    @admin_only
+    async def set_no_role_as_default(self, ctx):
+        '''
+        Sets all members without a role to default role.
+        '''
+
+        mod = dbAutoMod(ctx.guild.id)
+        def_role = discord.utils.get(ctx.guild.roles, id=mod.default_role_id)
+
+        if def_role is not None:
+            for member in ctx.guild.members:
+                if len(member.roles) == 1:
+                    await member.add_roles(def_role)
+                    docker_log(
+                        f'AutoMod set Role for {member.id} @ {member.guild.id}')
+
+            await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
+
+        else:
+            await ctx.message.channel.send("Sem default role")
+
     @commands.command(name='list_cursed_words', aliases=[
         'list_curse_words', 'ls_curse_words', 'ls_cursed_words'
     ])
