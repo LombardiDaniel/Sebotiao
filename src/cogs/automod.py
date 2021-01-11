@@ -35,7 +35,7 @@ class AutoModerator(commands.Cog):
         await self.client.change_presence(activity=discord.Game(name='Truco com o Wanderley'))
 
     @commands.command(name='ajuda', aliases=['ajuda noix'])
-    async def ajuda(self, ctx, *args, **kwargs):
+    async def ajuda(self, ctx):
         '''
         Custom made help command (works in conjunctino to default help
         command).
@@ -47,7 +47,7 @@ class AutoModerator(commands.Cog):
     ])
     @commands.guild_only()
     @admin_only
-    async def set_default_role(self, ctx, our_input, *args, **kwargs):
+    async def set_default_role(self, ctx, our_input):
         '''
         Sets the default role in the guild.
         '''
@@ -78,7 +78,7 @@ class AutoModerator(commands.Cog):
     ])
     @commands.guild_only()
     @admin_only
-    async def set_cursed_words(self, ctx, our_input, *args, **kwargs):
+    async def set_cursed_words(self, ctx, our_input):
         '''
         Sets the cursed words. (curse-?)
         '''
@@ -97,7 +97,7 @@ class AutoModerator(commands.Cog):
     ])
     @commands.guild_only()
     @admin_only
-    async def remove_cursed_words(self, ctx, our_input, *args, **kwargs):
+    async def remove_cursed_words(self, ctx, our_input):
         '''
         Unban words.
         '''
