@@ -41,7 +41,7 @@ Aqui você verá as ferramentas necessárias para o desenvolvimento do Sebotiao.
 
 #### Pré-requisitos
 
-Pessoalmente, recomendo que utilize docker. Nesse caso, utilize o [docker-compose.development.yml](https://github.com/LombardiDaniel/Sebotiao/blob/master/docker-compose.development.yml). Ele não criará uma database local [SQLite](https://www.sqlite.org/index.html), ao contrário de um container separado de [PostgreSQL](https://www.postgresql.org). Ela ficará salva no volume docker chamado `dev_bot_db`.
+Pessoalmente, recomendo que utilize docker. Nesse caso, utilize o [docker-compose.development.yml](https://github.com/LombardiDaniel/Sebotiao/blob/master/docker-compose.development.yml). Ele criará uma database [SQLite](https://www.sqlite.org/index.html) local, ao contrário de um container separado de [PostgreSQL](https://www.postgresql.org). Ela ficará salva no volume docker chamado `dev_bot_db`.
 
 ##### Utilizando Docker
 
