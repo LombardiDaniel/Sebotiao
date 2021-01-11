@@ -15,4 +15,4 @@ services:
             - dev_bot_db:/src/sqlite.db
 
 volumes:
-    - dev_bot_db
+    dev_bot_db:

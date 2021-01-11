@@ -34,6 +34,7 @@ class dbManager:
                     POSTGRES_PORT: '{db_port}'
                     """)
 
+        # If debug mode, creates local sqlite database
         if int(os.environ.get('DEBUG')):
             self.engine = create_engine(f'sqlite:///sqlite.db', echo=True)
         else:
