@@ -1,5 +1,5 @@
 [![MIT License](https://img.shields.io/github/license/LombardiDaniel/Sebotiao.svg?style=flat-square)](LICENSE.md)
-[![Build](https://img.shields.io/github/workflow/status/LombardiDaniel/Sebotiao/Builds%20bot%20update/master)]
+[![Build](https://img.shields.io/github/workflow/status/LombardiDaniel/Sebotiao/Builds%20bot%20update/master)](https://github.com/LombardiDaniel/Sebotiao/actions)
 
 <br />
 <p align="center">
