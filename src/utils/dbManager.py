@@ -42,7 +42,6 @@ class dbManager:
                 f'postgresql+psycopg2://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}',
                 echo=False)
 
-
         Base.metadata.create_all(bind=self.engine)
         self.session = sessionmaker(bind=self.engine)
 
@@ -73,6 +72,29 @@ class dbManager:
 
 
 class dbAutoMod(dbManager):
+    '''
+    Class that Checks IP of current device. Methods include:
+        - notificating user
+        - saving current ip to .txt file
+        - reading last knows ip to .txt file
+
+    Args:
+        - sender_email (str): E-mail used to send out notifications via email
+        - sender_email_pass (str): sender_email password
+        - telegram_bot_token (str): token of the telegram bot that will be used to
+            send out notifications via telegram
+        - mail_list (lst of str): list of emails to notify via email.
+        - telegram_list (lst of str): list of chat_ids to notify via telegram.
+
+    Attributes:
+        - ip (str): current IPv4 of device
+        - sender_email (str): E-mail used to send out notifications via email
+        - sender_email_pass (str): sender_email password
+        - telegram_bot_token (str): token of the telegram bot that will be used to
+            send out notifications via telegram
+        - alert_list (disct): dictionary containing 2 lists, 'mail' and 'telegram'.
+            Both are lists of chat_ids/mails to send out notifications to.
+    '''
 
     def update_default_role(self, default_role_id: int):
         '''
@@ -177,7 +199,7 @@ class dbAutoMod(dbManager):
                 session.commit()
 
     @property
-    def default_role(self):
+    def default_role_id(self):
         '''
         Gets the default role for new users from database.
 
@@ -201,7 +223,7 @@ class dbAutoMod(dbManager):
         if not admin_options[-1].default_role_id:
             return None
 
-        return admin_options[-1].default_role_id
+        return int(admin_options[-1].default_role_id)
 
     @property
     def cursed_words(self):

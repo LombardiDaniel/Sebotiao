@@ -61,7 +61,9 @@ class AutoModerator(commands.Cog):
             f'{ctx.guild.id} - {ctx.message.author.name} set default role as {role}')
         await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
 
-    @commands.command(name='list_cursed_words')
+    @commands.command(name='list_cursed_words', aliases=[
+        'list_curse_words', 'ls_curse_words', 'ls_cursed_words'
+    ])
     @commands.guild_only()
     async def list_cursed_words(self, ctx):
         '''
@@ -80,7 +82,7 @@ class AutoModerator(commands.Cog):
     @admin_only
     async def set_cursed_words(self, ctx, our_input):
         '''
-        Sets the cursed words. (curse-?)
+        Sets the cursed words.
         '''
 
         words = our_input.split(',')
@@ -136,7 +138,7 @@ class AutoModerator(commands.Cog):
         When a member joins.
         '''
         mod = dbAutoMod(member.guild.id)
-        def_role = discord.utils.get(member.guild.roles, id=mod.default_role)
+        def_role = discord.utils.get(member.guild.roles, id=mod.default_role_id)
 
         if def_role is not None:
             await member.add_roles(def_role)
