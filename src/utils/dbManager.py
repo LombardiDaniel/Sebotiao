@@ -23,24 +23,25 @@ class dbManager:
         db_name = os.environ.get('POSTGRES_DB')
         db_port = os.environ.get('POSTGRES_PORT')
 
-        # Raises an error if any of the needed env vars were not declared
-        if any(not var for var in [db_user, db_pass, db_name, db_port]):
-            raise NameError(
-                f"""Missing ENV VARS:
-                    POSTGRES_USER: '{db_user}',
-                    POSTGRES_PASSWORD: '{db_pass}',
-                    POSTGRES_DB: '{db_name}',
-                    DB_HOST: '{db_host}',
-                    POSTGRES_PORT: '{db_port}'
-                    """)
-
         # If debug mode, creates local sqlite database
         if int(os.environ.get('DEBUG')):
             self.engine = create_engine(f'sqlite:///sqlite.db', echo=True)
         else:
+            # Raises an error if any of the needed env vars were not declared
+            if any(not var for var in [db_user, db_pass, db_name, db_port]):
+                raise NameError(
+                    f"""Missing ENV VARS:
+                        POSTGRES_USER: '{db_user}',
+                        POSTGRES_PASSWORD: '{db_pass}',
+                        POSTGRES_DB: '{db_name}',
+                        DB_HOST: '{db_host}',
+                        POSTGRES_PORT: '{db_port}'
+                        """)
+
             self.engine = create_engine(
                 f'postgresql+psycopg2://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}',
                 echo=False)
+
 
         Base.metadata.create_all(bind=self.engine)
         self.session = sessionmaker(bind=self.engine)
