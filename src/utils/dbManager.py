@@ -16,9 +16,23 @@ class dbManager:
         self.guild_id = str(guild_id)
         db_user = os.environ.get('POSTGRES_USER')
         db_pass = os.environ.get('POSTGRES_PASSWORD')
-        db_host = os.environ.get('DB_HOST')
+
+        host = os.environ.get('DB_HOST')
+        db_host = host if host is not None else 'db'
+
         db_name = os.environ.get('POSTGRES_DB')
-        db_port = os.environ.get('POSTGRES_PORT') if os.environ.get('POSTGRES_PORT') is not None else 'db'
+        db_port = os.environ.get('POSTGRES_PORT')
+
+        # Raises an error if any of the needed env vars were not declared
+        if any(not var for var in [db_user, db_pass, db_name, db_port]):
+            raise NameError(
+                f"""Missing ENV VARS:
+                    POSTGRES_USER: '{db_user}',
+                    POSTGRES_PASSWORD: '{db_pass}',
+                    POSTGRES_DB: '{db_name}',
+                    DB_HOST: '{db_host}',
+                    POSTGRES_PORT: '{db_port}'
+                    """)
 
         if int(os.environ.get('DEBUG')):
             self.engine = create_engine(f'sqlite:///sqlite.db', echo=True)

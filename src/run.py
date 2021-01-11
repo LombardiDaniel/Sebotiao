@@ -24,4 +24,8 @@ if __name__ == '__main__':
         client.load_extension(f'cogs.{filename[:-3]}')
 
     TOKEN = os.environ.get('BOT_TOKEN')
+
+    if not TOKEN:
+        raise NameError("Missing env variable: BOT_TOKEN")
+
     client.run(TOKEN)
