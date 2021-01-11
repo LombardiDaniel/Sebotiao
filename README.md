@@ -63,8 +63,8 @@ As variáveis de ambiente que o container bot precisa são:
 | Nome da Variável | Significado                                                                                                                                                | Obrigatória |
 | :--------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------: |
 |     BOT_TOKEN    | Token do bot (disponibilizado pelo discord)                                                                                                                |     Sim     |
-|      DB_HOST     | IP (ou nome do container) da localidade da database                                                                                                        |     Sim     |
-|       DEBUG      | Se `0`, a database será SQLite no próprio diretório (único container docker); se `1`, é necessário um segundo container, contendo uma database PostgreSQL. |     Não    |
+|      DB_HOST     | IP (ou nome do container) da localidade da database                                                                                                        |     Não (default=`db`)     |
+|       DEBUG      | Se `0`, a database será SQLite no próprio diretório (único container docker); se `1`, é necessário um segundo container, contendo uma database PostgreSQL. |     Não(default=`0`)    |
 
 As variáveis de ambiente que o container da database precisa são:
 

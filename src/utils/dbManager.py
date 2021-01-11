@@ -18,7 +18,7 @@ class dbManager:
         db_pass = os.environ.get('POSTGRES_PASSWORD')
         db_host = os.environ.get('DB_HOST')
         db_name = os.environ.get('POSTGRES_DB')
-        db_port = os.environ.get('POSTGRES_PORT')
+        db_port = os.environ.get('POSTGRES_PORT') if os.environ.get('POSTGRES_PORT') is not None else 'db'
 
         if int(os.environ.get('DEBUG')):
             self.engine = create_engine(f'sqlite:///sqlite.db', echo=True)
