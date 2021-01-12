@@ -35,12 +35,12 @@ class AutoModerator(commands.Cog):
         await self.client.change_presence(activity=discord.Game(name='Truco com o Wanderley'))
 
     @commands.command(name='ajuda', aliases=['ajuda noix'])
-    async def ajuda(self, ctx):
+    async def ajuda(self, ctx, our_input=None):
         '''
         Custom made help command (works in conjunctino to default help
         command).
         '''
-        await ctx.channel.send(MessageFormater.ajuda())
+        await ctx.channel.send(MessageFormater.ajuda(our_input))
 
     @commands.command(name='set_default_role', aliases=[
         'set_def_role', 'update_def_role', 'update_default_role'
@@ -85,22 +85,8 @@ class AutoModerator(commands.Cog):
         else:
             await ctx.message.channel.send("Sem default role")
 
-    @commands.command(name='list_cursed_words', aliases=[
-        'list_curse_words', 'ls_curse_words', 'ls_cursed_words'
-    ])
-    @commands.guild_only()
-    async def list_cursed_words(self, ctx):
-        '''
-        Lists all cursed words from guild.
-        '''
-
-        mod = dbAutoMod(ctx.guild.id)
-
-        for word in mod.cursed_words:
-            await ctx.message.channel.send(word)
-
-    @commands.command(name='set_cursed_word', aliases=[
-        'set_cursed_words', 'add_cursed_words', 'add_cursed_word'
+    @commands.command(name='set_cursed_words', aliases=[
+        'set_cursed_word', 'add_cursed_words', 'add_cursed_word',
     ])
     @commands.guild_only()
     @admin_only
@@ -118,8 +104,22 @@ class AutoModerator(commands.Cog):
             f'{ctx.guild.id} - {ctx.message.author.name} added cursed word(s): {our_input}')
         await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
 
-    @commands.command(name='uncurse_word', aliases=[
-        'uncurse_words', 'remove_cursed_word', 'remove_cursed_words'
+    @commands.command(name='list_cursed_words', aliases=[
+        'list_curse_words', 'ls_curse_words', 'ls_cursed_words'
+    ])
+    @commands.guild_only()
+    async def list_cursed_words(self, ctx):
+        '''
+        Lists all cursed words from guild.
+        '''
+
+        mod = dbAutoMod(ctx.guild.id)
+
+        for word in mod.cursed_words:
+            await ctx.message.channel.send(word)
+
+    @commands.command(name='remove_cursed_words', aliases=[
+        'uncurse_words', 'remove_cursed_word', 'uncurse_word'
     ])
     @commands.guild_only()
     @admin_only
