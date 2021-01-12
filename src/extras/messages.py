@@ -26,6 +26,7 @@ class MessageFormater:
         > `set_cursed_words PALAVRA_1,PALAVRA_2,...` : adiciona palavra(s) à lista de palavras indesejadas\n
         > `list_cursed_words` : lista as palavras banidas\n
         > `uncurse_words PALAVRA_1,PALAVRA_2,...`: remove palavras da lista\n
+        > `set_no_role_as_default`: coloca todas as pessoas sem role como o role default\n
         '''
 
         return message
