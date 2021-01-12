@@ -23,10 +23,10 @@ class MessageFormater:
         Meu prefixo de comandos é: `tiao ` (perceba o espaço depois de "tiao")\n
         > `ajuda` : recursivo.\n
         > `set_def_role ROLE` : configura o role/cargo default que o automod colocará nos novos membros\n
+        > `set_no_role_as_default`: coloca todas as pessoas sem role como o role default\n
         > `set_cursed_words PALAVRA_1,PALAVRA_2,...` : adiciona palavra(s) à lista de palavras indesejadas\n
         > `list_cursed_words` : lista as palavras banidas\n
         > `uncurse_words PALAVRA_1,PALAVRA_2,...`: remove palavras da lista\n
-        > `set_no_role_as_default`: coloca todas as pessoas sem role como o role default\n
         '''
 
         return message
