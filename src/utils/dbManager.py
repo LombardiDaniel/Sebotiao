@@ -10,6 +10,17 @@ from run import Base
 class dbManager:
     '''
     This class creates the db engine for use in all sub-classes.
+
+    Args:
+        - guild_id (str): string containing the guild id.
+
+    Attributes:
+        - session: sessionmaker object from SQLalchemy
+        - engine: engine object from SQLalchemy
+
+    Methods:
+        None.
+
     '''
 
     def __init__(self, guild_id):
@@ -73,30 +84,24 @@ class dbManager:
 
 class dbAutoMod(dbManager):
     '''
-    Class that Checks IP of current device. Methods include:
-        - notificating user
-        - saving current ip to .txt file
-        - reading last knows ip to .txt file
+    This class that abstracts the interaction with the database, offering simpler methods.
+    When creating an object from this class, all methods will use self.guild_id to
+    select what row should be altered in the desired table.
 
     Args:
-        - sender_email (str): E-mail used to send out notifications via email
-        - sender_email_pass (str): sender_email password
-        - telegram_bot_token (str): token of the telegram bot that will be used to
-            send out notifications via telegram
-        - mail_list (lst of str): list of emails to notify via email.
-        - telegram_list (lst of str): list of chat_ids to notify via telegram.
+        - guild_id (str): string containing the guild id.
 
     Attributes:
-        - ip (str): current IPv4 of device
-        - sender_email (str): E-mail used to send out notifications via email
-        - sender_email_pass (str): sender_email password
-        - telegram_bot_token (str): token of the telegram bot that will be used to
-            send out notifications via telegram
-        - alert_list (disct): dictionary containing 2 lists, 'mail' and 'telegram'.
-            Both are lists of chat_ids/mails to send out notifications to.
+        - default_role_id (int): the id of the default role.
+        - cursed_words (lst): List of all cursed words stored in the database.
+
+    Methods:
+        - update_default_role: Updates the default role in database.
+        - add_cursed_words: Adds a new cursed word to the database.
+        - remove_cursed_words: Removes a cursed word from the database.
     '''
 
-    def update_default_role(self, default_role_id: int):
+    def update_default_role(self, default_role_id):
         '''
         Adds/Updates the current default role in the database.
 
