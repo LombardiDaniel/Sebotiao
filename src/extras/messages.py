@@ -6,8 +6,6 @@ Creates the formated messages to be sent on to the discord.
 
 import yaml
 
-# from discord import Embed
-
 
 class MessageFormater:
     '''
@@ -36,7 +34,7 @@ class MessageFormater:
             # Tenta achar no nivel superior, se não encontrar, vai para o próx. camada
             try:
                 message = ''
-                message += f"`{our_input}` é uma Classes de Comandos:\n"
+                message += f"`{our_input}` é uma Classe de Comandos:\n"
                 message += f"> {commands_dict[our_input]['msg']}\n\n"
                 message += "Comandos:\n"
 
@@ -71,7 +69,7 @@ class MessageFormater:
             for name, module in commands_dict.items():
                 message += f"> `{name}`: {module['msg']}\n"
 
-            message += '\nEvie: `tiao ajuda CATEGORIA` para mais detalhes\n'
+            message += '\nEnvie `tiao ajuda CATEGORIA` para mais detalhes\n'
         return message
 
     @staticmethod

@@ -23,10 +23,10 @@ automod:
 
         list_cursed_words:
             aliases: "list_curse_words,ls_curse_words,ls_cursed_words"
-            msg: "lista as palavras banidas"
+            msg: "lista as palavras indesejadas"
             args: "Nenhum"
 
         remove_cursed_words:
             aliases: "uncurse_words, remove_cursed_word, uncurse_word"
-            msg: "remove palavras da lista de palavras banidas"
+            msg: "remove palavras da lista de palavras indesejadas"
             args: "`PALAVRA_1`,`PALAVRA_2`,... (pelo menos 1 palavra obrigatória)"
