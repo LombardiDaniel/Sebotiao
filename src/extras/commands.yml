@@ -19,7 +19,7 @@ automod:
         set_welcome_channel:
             aliases: "set_home_channel,set_welcome_msg,set_home_msg"
             msg: "Seta o canal de entrada, onde o usuário precisa reagir ao post para ter acesso ao resto do servidor."
-            args: "`TITULO_DA_MSG`;`CONTEUDO_DA_MSG`  (obrigatório)"
+            args: "\"`TITULO_DA_MSG`;`CONTEUDO_DA_MSG`\"  (obrigatório)"
 
         set_cursed_words:
             aliases: "set_cursed_word,add_cursed_words,add_cursed_word"
