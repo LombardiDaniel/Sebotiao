@@ -3,7 +3,6 @@ from random import choice
 import discord
 from discord.ext import commands
 
-
 from utils.docker import docker_log
 from utils.dbManager import dbAutoMod
 from utils.decorators import admin_only

@@ -18,6 +18,8 @@ intents.members = True
 
 client = commands.Bot(command_prefix=get_prefix, intents=intents)
 
+client.remove_command('help')
+
 
 if __name__ == '__main__':
     for filename in cogs:
