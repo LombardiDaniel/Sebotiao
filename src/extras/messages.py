@@ -7,7 +7,6 @@ Creates the formated messages to be sent on to the discord.
 import yaml
 
 # from discord import Embed
-from extras import constants
 
 
 class MessageFormater:
