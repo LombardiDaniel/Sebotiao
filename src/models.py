@@ -18,6 +18,7 @@ class AdminOptions(Base):
     guild_id = Column('guild_id', String(100))
     id = Column('id', Integer, primary_key=True)
     default_role_id = Column('default_role_id', String(100), nullable=True)
+    home_msg_id = Column('home_msg_id', String(100), nullable=True)
     cursed_words = Column('cursed_words', String(500), nullable=True)
 
 

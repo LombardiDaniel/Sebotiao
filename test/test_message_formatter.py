@@ -5,7 +5,7 @@ from src.extras.messages import MessageFormater
 
 class TestMessage(unittest.TestCase):
     '''
-    Tests all methods from the 'MessageFormater' module.
+    Tests methods from the 'MessageFormater' module.
     '''
 
     def test_cursed_words_msg(self):
@@ -23,6 +23,14 @@ class TestMessage(unittest.TestCase):
         self.assertEqual(result, msg)
         # Tests required arg
         self.assertRaises(TypeError, MessageFormater.cursed_words_msg)
+
+    def test_ajuda_msg(self):
+        '''
+        Test for `ajuda()`.
+        '''
+
+        self.assertRaises(KeyError, MessageFormater.ajuda, our_input='adjfhlajh')
+
 
 
 if __name__ == '__main__':

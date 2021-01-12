@@ -6,6 +6,9 @@ Creates the formated messages to be sent on to the discord.
 
 import yaml
 
+from discord import Embed
+
+from extras import constants
 
 class MessageFormater:
     '''
@@ -42,7 +45,7 @@ class MessageFormater:
                 for key, value in commands_dict[our_input]['commands'].items():
                     message += f"> `{key}`: {value['msg']}\n"
 
-                message += '\nEvie: `tiao ajuda COMANDO` para mais detalhes\n'
+                message += "\nEvie: `tiao ajuda COMANDO` para mais detalhes\n"
 
             # O argumento passado é um comando, não uma categoria
             except KeyError:
@@ -71,6 +74,22 @@ class MessageFormater:
 
             message += '\nEnvie `tiao ajuda CATEGORIA` para mais detalhes\n'
         return message
+
+    @staticmethod
+    def home_channel_message(title, description):
+        '''
+        '''
+
+        embed_obj = Embed(title=title,
+                          description=description,
+                          color=constants.Colours.purple)
+
+        embed_obj.add_field(name="Para ter acesso ao server",
+                            value="Adicione uma reação à este post.")
+
+        embed_obj.set_footer(text="Este server é moderado pelo Sebotião")
+
+        return embed_obj
 
     @staticmethod
     def cursed_words_msg(user_id):

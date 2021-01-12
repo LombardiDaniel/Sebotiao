@@ -36,7 +36,7 @@ class dbManager:
 
         # If debug mode, creates local sqlite database
         if int(os.environ.get('DEBUG')):
-            self.engine = create_engine(f'sqlite:///sqlite.db', echo=True)
+            self.engine = create_engine(f'sqlite:///sqlite.db', echo=False)
         else:
             # Raises an error if any of the needed env vars were not declared
             if any(not var for var in [db_user, db_pass, db_name, db_port]):
@@ -131,6 +131,73 @@ class dbAutoMod(dbManager):
             admin_options = AdminOptions()
             admin_options.guild_id = self.guild_id
             admin_options.default_role_id = default_role_id
+            session.add(admin_options)
+            session.commit()
+
+        session.close()
+
+    def set_welcome_channel(self, home_msg_id):
+        '''
+        Adds/Updates the current home channel msg in the database.
+
+        Args:
+            - home_msg_id (int): ID of home channel message.
+
+        Returns:
+            None.
+
+        '''
+
+        home_msg_id = str(home_msg_id)
+
+        session = self.session()
+
+        guild_query = session.query(AdminOptions).filter(
+            AdminOptions.guild_id == self.guild_id)
+
+        # if there are already entries for this guild, updates them
+        if guild_query.count():
+            guild_query[-1].home_msg_id = str(home_msg_id)
+            session.commit()
+
+        # if there are no entries for this guild, creates entry
+        else:
+            admin_options = AdminOptions()
+            admin_options.guild_id = self.guild_id
+            admin_options.home_msg_id = str(home_msg_id)
+            session.add(admin_options)
+            session.commit()
+
+        session.close()
+
+    def remove_welcome_channel(self):
+        '''
+        Adds/Updates the current home channel msg in the database.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+
+        '''
+
+        session = self.session()
+
+        guild_query = session.query(AdminOptions).filter(
+            AdminOptions.guild_id == self.guild_id)
+
+        # if there are already entries for this guild, updates them
+        if guild_query.count():
+            if guild_query[-1].home_msg_id:
+                guild_query[-1].home_msg_id = "0"
+                session.commit()
+
+        # if there are no entries for this guild, creates entry
+        else:
+            admin_options = AdminOptions()
+            admin_options.guild_id = self.guild_id
+            admin_options.home_msg_id = "0"
             session.add(admin_options)
             session.commit()
 
@@ -256,3 +323,28 @@ class dbAutoMod(dbManager):
             return ["nenhuma palavra banida"]
 
         return admin_options[-1].cursed_words.split(',')
+
+    @property
+    def home_msg_id(self):
+        '''
+        Gets the home channel message id.
+
+        Args:
+            None.
+
+        Returns:
+            - home_msg_id (int): ID of the home channel message.
+
+        '''
+
+        session = self.session()
+
+        admin_options = session.query(AdminOptions).filter(
+            AdminOptions.guild_id == self.guild_id)
+
+        session.close()
+
+        if not admin_options.count() or not admin_options[-1].home_msg_id:
+            return 0
+
+        return int(admin_options[-1].home_msg_id)
