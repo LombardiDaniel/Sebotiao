@@ -27,7 +27,7 @@ class AutoModerator(commands.Cog):
 
         usr_num = 0
         for guild in self.client.guilds:
-            usr_num += guild.member_count
+            usr_num += len(guild.members)
 
         docker_log(
             f'Logged-in on {len(self.client.guilds)}, at the reach of {usr_num} users')
