@@ -201,10 +201,11 @@ class dbAutoMod(dbManager):
                 for word in words:
                     if word in curr_words:
                         curr_words.remove(word)
+                        break
 
                 # Updates table
                 guild_query[-1].\
-                    cursed_words = ','.join(curr_words)
+                    cursed_words = ','.join(set(words))
                 session.commit()
 
         session.close()
