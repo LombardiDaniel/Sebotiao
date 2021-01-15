@@ -155,13 +155,17 @@ class dbAutoMod(dbManager):
         # if there are already entries for this guild, updates them
         if guild_query.count():
             if guild_query[-1].cursed_words:
+
+                new_words = set(words + guild_query[-1].cursed_words.split(','))
+
                 guild_query[-1].\
-                    cursed_words = ','.join(
-                        words + guild_query[-1].cursed_words.split(','))
+                    cursed_words = ','.join(new_words)
+
                 session.commit()
             else:
-                guild_query[-1].cursed_words = ','.join(words)
+                guild_query[-1].cursed_words = ','.join(set(words))
                 session.commit()
+
         # if there are no entries for this guild, creates entry
         else:
             admin_options = AdminOptions()
