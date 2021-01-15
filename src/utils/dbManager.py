@@ -6,10 +6,13 @@ from sqlalchemy.orm import sessionmaker
 from models import AdminOptions
 from run import Base
 
+from utils.docker import docker_log
+
 
 class dbManager:
     '''
     This class creates the db engine for use in all sub-classes.
+    The ID of discord Snowflake Objects are stored as strings in the database.
 
     Args:
         - guild_id (str): string containing the guild id.
@@ -36,7 +39,8 @@ class dbManager:
 
         # If debug mode, creates local sqlite database
         if int(os.environ.get('DEBUG')):
-            self.engine = create_engine(f'sqlite:///sqlite.db', echo=False)
+            self.engine = create_engine(f'sqlite:////devdb/sqlite.db', echo=True)
+            docker_log("Connected to SQLITE DB (Do NOT use in production)", lvl="WARNING")
         else:
             # Raises an error if any of the needed env vars were not declared
             if any(not var for var in [db_user, db_pass, db_name, db_port]):
@@ -52,6 +56,7 @@ class dbManager:
             self.engine = create_engine(
                 f'postgresql+psycopg2://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}',
                 echo=False)
+            docker_log("Connected to PostgreSQL")
 
         Base.metadata.create_all(bind=self.engine)
         self.session = sessionmaker(bind=self.engine)
@@ -172,7 +177,7 @@ class dbAutoMod(dbManager):
 
     def remove_welcome_channel(self):
         '''
-        Adds/Updates the current home channel msg in the database.
+        Removes the current home channel msg in the database.
 
         Args:
             None.
