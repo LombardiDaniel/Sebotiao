@@ -203,6 +203,8 @@ class dbAutoMod(dbManager):
                     cursed_words = ','.join(curr_words)
                 session.commit()
 
+        session.close()
+
     @property
     def default_role_id(self):
         '''
