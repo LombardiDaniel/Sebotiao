@@ -115,7 +115,7 @@ class MessageFormater:
         embed_obj.add_field(
             name='Principais colaboradores:',
             value=", ".join([contributor['login'] for contributor in lst_contributors[0:4]]),
-            inline=False)
+            inline=True)
 
         date_time_obj = datetime.strptime(request['updated_at'], '%Y-%m-%dT%H:%M:%SZ')
         delta = datetime.now() - date_time_obj
@@ -125,7 +125,7 @@ class MessageFormater:
         embed_obj.add_field(
             name='Último Update:',
             value=msg,
-            inline=False)
+            inline=True)
 
         releases = requests.get(url + '/releases').json()[0]
         embed_obj.set_footer(text=f"{releases['tag_name']}")
