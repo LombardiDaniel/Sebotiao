@@ -36,7 +36,7 @@ class TestMessage(unittest.TestCase):
         embed_obj = embed_obj = Embed(title='title')
 
         # Tests result type
-        self.assertIsInstance(result, embed_obj)
+        self.assertIsInstance(result, type(embed_obj))
 
 
 if __name__ == '__main__':

@@ -10,7 +10,7 @@ import yaml
 
 from discord import Embed
 
-from extras.constants import Colours
+from src.extras.constants import Colours
 
 
 class MessageFormater:
