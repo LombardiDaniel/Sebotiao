@@ -36,10 +36,17 @@ class AutoModerator(commands.Cog):
     @commands.command(name='ajuda', aliases=['ajuda noix'])
     async def ajuda(self, ctx, our_input=None):
         '''
-        Custom made help command (works in conjunctino to default help
-        command).
+        Custom made help command. Pulls configs from extras/commands.yml
         '''
         await ctx.channel.send(MessageFormater.ajuda(our_input))
+
+    @commands.command(name='desenvolvimento', aliases=[
+        'dev', 'development', 'git', 'info', 'status', '-v', '--version'])
+    async def desenvolvimento(self, ctx):
+        '''
+        Replies with an embed about the current state of development.
+        '''
+        await ctx.channel.send(embed=MessageFormater.development())
 
     @commands.command(name='set_default_role', aliases=[
         'set_def_role', 'update_def_role', 'update_default_role'
