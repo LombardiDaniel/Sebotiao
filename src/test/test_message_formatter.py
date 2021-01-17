@@ -2,7 +2,7 @@ import unittest
 
 from discord import Embed
 
-from src.extras.messages import MessageFormater
+from extras.messages import MessageFormater
 
 
 class TestMessage(unittest.TestCase):

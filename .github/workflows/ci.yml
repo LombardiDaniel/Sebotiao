@@ -34,6 +34,7 @@ jobs:
 
       - name: Python Unit Tests
         run: |
+          cd src
           python -m unittest
 
       - name: Tests docker build
