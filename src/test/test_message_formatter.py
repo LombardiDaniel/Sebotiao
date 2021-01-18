@@ -33,7 +33,7 @@ class TestMessage(unittest.TestCase):
 
         result = MessageFormater.development()
 
-        embed_obj = embed_obj = Embed(title='title')
+        embed_obj = Embed(title='title')
 
         # Tests result type
         self.assertIsInstance(result, type(embed_obj))
