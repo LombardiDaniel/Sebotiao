@@ -83,3 +83,4 @@ Crie um bot [por aqui](https://discord.com/developers/applications/) e lembre-se
 ### License
 
 Este projeto está sob a Licença MIT - veja o arquivo [LICENSE.md](LICENSE.md) para detalhes.
+kkkj
