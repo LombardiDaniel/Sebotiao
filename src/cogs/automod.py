@@ -221,14 +221,15 @@ class AutoModerator(commands.Cog):
         if reaction.message.id != mod.home_msg_id:
             return
 
-        if def_role is not None and int(mod.home_msg_id):
-            if len(member.roles) == 1:
-                await member.add_roles(def_role)
-                docker_log(
-                    f'AutoMod set autoRole for {member.id} @ {member.guild.id}')
-            else:
-                docker_log(
-                    f'{member.id} @ {member.guild.id} already has a role.')
+        if mod.home_msg_id:
+            if def_role is not None:
+                if len(member.roles) == 1:
+                    await member.add_roles(def_role)
+                    docker_log(
+                        f'AutoMod set autoRole for {member.id} @ {member.guild.id}')
+                else:
+                    docker_log(
+                        f'{member.id} @ {member.guild.id} already has a role.')
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -238,10 +239,12 @@ class AutoModerator(commands.Cog):
         mod = dbAutoMod(member.guild.id)
         def_role = discord.utils.get(member.guild.roles, id=mod.default_role_id)
 
-        if def_role is not None and mod.home_msg_id is None:
-            await member.add_roles(def_role)
-            docker_log(
-                f'AutoMod set autoRole for {member.id} @ {member.guild.id}')
+        # mod.home_msg_id == 0 means that autorole is managed by home channel
+        if not mod.home_msg_id:
+            if def_role is not None:
+                await member.add_roles(def_role)
+                docker_log(
+                    f'AutoMod set autoRole for {member.id} @ {member.guild.id}')
 
 
 def setup(client):

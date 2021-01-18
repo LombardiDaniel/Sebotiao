@@ -62,31 +62,6 @@ class dbManager:
         self.session = sessionmaker(bind=self.engine)
 
 
-# class dbStreamManager(dbManager):
-#
-#     def add_streamer(self, disc_id, twitch_url):
-#         '''
-#         Adds a streamer to the database.
-#
-#         Args:
-#             - disc_id (int): ID of the user that created the request.
-#             - twitch_url (str): URL of the live-stream from twitch.
-#
-#         Returns:
-#             None.
-#
-#         '''
-#         session = self.session()
-#
-#         streamer = Streamer()
-#         streamer.guild_id = self.guild_id
-#         streamer.disc_id = str(disc_id)
-#         streamer.twitch_url = twitch_url
-#
-#         session.add(streamer)
-#         session.close()
-
-
 class dbAutoMod(dbManager):
     '''
     This class that abstracts the interaction with the database, offering simpler methods.
@@ -349,7 +324,7 @@ class dbAutoMod(dbManager):
 
         session.close()
 
-        if not admin_options.count() or not admin_options[-1].home_msg_id:
+        if not admin_options.count() or not int(admin_options[-1].home_msg_id):
             return 0
 
         return int(admin_options[-1].home_msg_id)
