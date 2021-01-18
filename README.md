@@ -24,7 +24,6 @@
 -   [Desenvolvendo](#desenvolvendo)
     -   [Pré requisitos](#pré-requisitos)
     -   [Organização do Projeto](#organização-do-projeto)
--   [Roadmap](#roadmap)
 -   [License](#license)
 
 ### Sobre o Projeto
