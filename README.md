@@ -24,7 +24,6 @@
 -   [Desenvolvendo](#desenvolvendo)
     -   [Pré requisitos](#pré-requisitos)
     -   [Organização do Projeto](#organização-do-projeto)
--   [Roadmap](#roadmap)
 -   [License](#license)
 
 ### Sobre o Projeto
@@ -84,3 +83,4 @@ Crie um bot [por aqui](https://discord.com/developers/applications/) e lembre-se
 ### License
 
 Este projeto está sob a Licença MIT - veja o arquivo [LICENSE.md](LICENSE.md) para detalhes.
+kkkj
