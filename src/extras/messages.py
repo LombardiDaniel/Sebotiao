@@ -77,7 +77,7 @@ class MessageFormater:
 
             message += '\nEnvie `tiao ajuda CATEGORIA` para mais detalhes\n'
 
-        message += "Obs: Lembre de utilizar `tiao ` antes de qualquer comando."
+        message += "\n> Obs: Lembre de utilizar `tiao ` antes de qualquer comando.\n"
 
         return message
 
