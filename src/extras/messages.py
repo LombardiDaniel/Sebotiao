@@ -71,7 +71,7 @@ class MessageFormater:
                             break
 
         else:
-            message += 'Categorias disponíveis:\n'
+            message = 'Categorias disponíveis:\n'
             for name, module in commands_dict.items():
                 message += f"> `{name}`: {module['msg']}\n"
 
