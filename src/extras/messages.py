@@ -71,11 +71,13 @@ class MessageFormater:
                             break
 
         else:
-            message = 'Categorias disponíveis:\n'
+            message += 'Categorias disponíveis:\n'
             for name, module in commands_dict.items():
                 message += f"> `{name}`: {module['msg']}\n"
 
             message += '\nEnvie `tiao ajuda CATEGORIA` para mais detalhes\n'
+
+        message += "Obs: Lembre de utilizar `tiao ` antes de qualquer comando."
 
         return message
 
