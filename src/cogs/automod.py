@@ -86,12 +86,14 @@ class AutoModerator(commands.Cog):
             await ctx.message.channel.send(
                 embed=MessageFormater.home_channel_message(embed_title, embed_desc))
             mod.set_welcome_channel(home_msg_id=ctx.message.channel.last_message_id)
+            await ctx.author.send(
+                f"Configure as permissões para pessoas sem cargos terem acesso APENAS ao canal `{home_channel.name}`.")
 
         else:
             await ctx.message.channel.send("Sem default role")
 
     @commands.command(name='remove_welcome_channel', aliases=[
-        'remove_home_channel', 'remove_welcome_msg', 'remove_home_msg'
+        'remove_home_channel', 'remove_welcome_msg', 'remove_home_msg', 'unset_home_channel'
     ])
     @commands.guild_only()
     @admin_only
@@ -107,6 +109,7 @@ class AutoModerator(commands.Cog):
 
         if not mod.home_msg_id:
             await ctx.message.channel.send((choice(constants.POSITIVE_RESPONSES)))
+            await ctx.author.send("Lembre-se de resetar as permissões dos canais.")
 
 
     @commands.command(name='set_no_role_as_default', aliases=[

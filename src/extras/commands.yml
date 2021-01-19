@@ -18,12 +18,12 @@ automod:
 
         set_welcome_channel:
             aliases: "set_home_channel,set_welcome_msg,set_home_msg"
-            msg: "Seta o canal de entrada, onde o usuário precisa reagir ao post para ter acesso ao resto do servidor."
-            args: "\"`TITULO_DA_MSG`;`CONTEUDO_DA_MSG`\"  (obrigatório)"
+            msg: "Seta o canal de entrada, onde o usuário precisa reagir ao post para ter acesso ao resto do servidor. (Obs: você deve configurar as permissões)"
+            args: "\"`TITULO_DA_MSG`;`CONTEUDO_DA_MSG`\"  (obrigatório, utilize `\"`)"
 
         remove_welcome_channel:
-            aliases: "remove_home_channel,remove_welcome_msg,remove_home_msg"
-            msg: "Des-seta o canal de entrada."
+            aliases: "remove_home_channel,remove_welcome_msg,remove_home_msg,unset_home_channel"
+            msg: "Remove o canal de entrada. (Obs: você deve configurar as permissões)"
             args: "Nenhum"
 
         set_cursed_words:
