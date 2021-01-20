@@ -1,5 +1,5 @@
 automod:
-    msg: "Funcionalidades de AutoModeração."
+    msg: "Funcionalidades de AutoModeração (mensagens etc.)"
     commands:
         ajuda:
             aliases: "ajuda noix"
@@ -11,6 +11,24 @@ automod:
             msg: "fala informações sobre o desenvolvimento do bot"
             args: "Nenhum"
 
+        set_cursed_words:
+            aliases: "set_cursed_word,add_cursed_words,add_cursed_word"
+            msg: "adiciona palavra(s) à lista de palavras indesejadas."
+            args: "`PALAVRA_1`,`PALAVRA_2`,... (pelo menos 1 palavra obrigatória)"
+
+        list_cursed_words:
+            aliases: "list_curse_words,ls_curse_words,ls_cursed_words"
+            msg: "lista as palavras indesejadas"
+            args: "Nenhum"
+
+        remove_cursed_words:
+            aliases: "uncurse_words, remove_cursed_word, uncurse_word"
+            msg: "remove palavras da lista de palavras indesejadas."
+            args: "`PALAVRA_1`,`PALAVRA_2`,... (pelo menos 1 palavra obrigatória)"
+
+autorole:
+    msg: "Funções para AutoRole"
+    commands:
         set_default_role:
             aliases: "set_def_role,update_def_role,update_default_role"
             msg: "configura o role/cargo default que o automod colocará nos novos membros."
@@ -30,18 +48,3 @@ automod:
             aliases: "remove_home_channel,remove_welcome_msg,remove_home_msg,unset_home_channel"
             msg: "Remove o canal de entrada. (Obs: você deve configurar as permissões)"
             args: "Nenhum"
-
-        set_cursed_words:
-            aliases: "set_cursed_word,add_cursed_words,add_cursed_word"
-            msg: "adiciona palavra(s) à lista de palavras indesejadas."
-            args: "`PALAVRA_1`,`PALAVRA_2`,... (pelo menos 1 palavra obrigatória)"
-
-        list_cursed_words:
-            aliases: "list_curse_words,ls_curse_words,ls_cursed_words"
-            msg: "lista as palavras indesejadas"
-            args: "Nenhum"
-
-        remove_cursed_words:
-            aliases: "uncurse_words, remove_cursed_word, uncurse_word"
-            msg: "remove palavras da lista de palavras indesejadas."
-            args: "`PALAVRA_1`,`PALAVRA_2`,... (pelo menos 1 palavra obrigatória)"
