@@ -10,8 +10,7 @@ import yaml
 
 from discord import Embed
 
-from extras.constants import Colours
-
+from extras import constants
 
 class MessageFormater:
     '''
@@ -82,6 +81,22 @@ class MessageFormater:
         return message
 
     @staticmethod
+    def home_channel_message(title, description):
+        '''
+        '''
+
+        embed_obj = Embed(title=title,
+                          description=description,
+                          color=constants.Colours.purple)
+
+        embed_obj.add_field(name="Para ter acesso ao server",
+                            value="Adicione uma reação à este post.")
+
+        embed_obj.set_footer(text="Este server é moderado pelo Sebotião")
+
+        return embed_obj
+
+    @staticmethod
     def cursed_words_msg(user_id):
         '''
         The reply when someone says a cursed word.
@@ -108,7 +123,7 @@ class MessageFormater:
             title=request['name'],
             url=request['html_url'],
             description=request['description'],
-            color=Colours.bright_green)
+            color=constants.Colours.bright_green)
 
         embed_obj.set_thumbnail(
             url="https://raw.githubusercontent.com/LombardiDaniel/Sebotiao/master/LOGO.png")

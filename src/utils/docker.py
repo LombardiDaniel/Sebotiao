@@ -9,4 +9,4 @@ def docker_log(msg, lvl='INFO'):
         - msg (str): message to be logged
         - lvl (str, optional): level of logged message
     '''
-    print(f'{datetime.now()}; {lvl.upper()}; {msg};')
+    print(f'{str(datetime.now())[:-3]}; {lvl.upper()}; {msg};')

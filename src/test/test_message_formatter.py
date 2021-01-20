@@ -7,7 +7,7 @@ from extras.messages import MessageFormater
 
 class TestMessage(unittest.TestCase):
     '''
-    Tests all methods from the 'MessageFormater' module.
+    Tests methods from the 'MessageFormater' module.
     '''
 
     def test_cursed_words_msg(self):
@@ -38,6 +38,11 @@ class TestMessage(unittest.TestCase):
         # Tests result type
         self.assertIsInstance(result, type(embed_obj))
 
+    def test_ajuda_msg(self):
+        '''
+        Tests for `ajuda()`.
+        '''
+        self.assertRaises(KeyError, MessageFormater.ajuda, our_input='asdfasdf')
 
 if __name__ == '__main__':
     unittest.main()

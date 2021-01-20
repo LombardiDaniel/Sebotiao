@@ -1,15 +1,20 @@
 import os
 
+import json
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from models import AdminOptions
 from run import Base
 
+from utils.docker import docker_log
+
 
 class dbManager:
     '''
     This class creates the db engine for use in all sub-classes.
+    The ID of discord Snowflake Objects are stored as strings in the database.
 
     Args:
         - guild_id (str): string containing the guild id.
@@ -36,7 +41,8 @@ class dbManager:
 
         # If debug mode, creates local sqlite database
         if int(os.environ.get('DEBUG')):
-            self.engine = create_engine(f'sqlite:///sqlite.db', echo=True)
+            self.engine = create_engine(f'sqlite:////devdb/sqlite.db', echo=True)
+            docker_log("Connected to SQLITE DB (Do NOT use in production)", lvl="WARNING")
         else:
             # Raises an error if any of the needed env vars were not declared
             if any(not var for var in [db_user, db_pass, db_name, db_port]):
@@ -52,34 +58,10 @@ class dbManager:
             self.engine = create_engine(
                 f'postgresql+psycopg2://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}',
                 echo=False)
+            docker_log("Connected to PostgreSQL")
 
         Base.metadata.create_all(bind=self.engine)
         self.session = sessionmaker(bind=self.engine)
-
-
-# class dbStreamManager(dbManager):
-#
-#     def add_streamer(self, disc_id, twitch_url):
-#         '''
-#         Adds a streamer to the database.
-#
-#         Args:
-#             - disc_id (int): ID of the user that created the request.
-#             - twitch_url (str): URL of the live-stream from twitch.
-#
-#         Returns:
-#             None.
-#
-#         '''
-#         session = self.session()
-#
-#         streamer = Streamer()
-#         streamer.guild_id = self.guild_id
-#         streamer.disc_id = str(disc_id)
-#         streamer.twitch_url = twitch_url
-#
-#         session.add(streamer)
-#         session.close()
 
 
 class dbAutoMod(dbManager):
@@ -131,6 +113,73 @@ class dbAutoMod(dbManager):
             admin_options = AdminOptions()
             admin_options.guild_id = self.guild_id
             admin_options.default_role_id = default_role_id
+            session.add(admin_options)
+            session.commit()
+
+        session.close()
+
+    def set_welcome_channel(self, home_msg_id):
+        '''
+        Adds/Updates the current home channel msg in the database.
+
+        Args:
+            - home_msg_id (int): ID of home channel message.
+
+        Returns:
+            None.
+
+        '''
+
+        home_msg_id = str(home_msg_id)
+
+        session = self.session()
+
+        guild_query = session.query(AdminOptions).filter(
+            AdminOptions.guild_id == self.guild_id)
+
+        # if there are already entries for this guild, updates them
+        if guild_query.count():
+            guild_query[-1].home_msg_id = str(home_msg_id)
+            session.commit()
+
+        # if there are no entries for this guild, creates entry
+        else:
+            admin_options = AdminOptions()
+            admin_options.guild_id = self.guild_id
+            admin_options.home_msg_id = str(home_msg_id)
+            session.add(admin_options)
+            session.commit()
+
+        session.close()
+
+    def remove_welcome_channel(self):
+        '''
+        Removes the current home channel msg in the database.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+
+        '''
+
+        session = self.session()
+
+        guild_query = session.query(AdminOptions).filter(
+            AdminOptions.guild_id == self.guild_id)
+
+        # if there are already entries for this guild, updates them
+        if guild_query.count():
+            if guild_query[-1].home_msg_id:
+                guild_query[-1].home_msg_id = "0"
+                session.commit()
+
+        # if there are no entries for this guild, creates entry
+        else:
+            admin_options = AdminOptions()
+            admin_options.guild_id = self.guild_id
+            admin_options.home_msg_id = "0"
             session.add(admin_options)
             session.commit()
 
@@ -210,6 +259,49 @@ class dbAutoMod(dbManager):
 
         session.close()
 
+    def add_react_role(self, react_role_dict):
+        '''
+        Adds/Updates the current ract_role_dictionary.
+
+        Args:
+            - react_role_dict (dict): dictionary in the format:
+                {
+                    "react_emote": role_id,
+                }
+
+        Returns:
+            None.
+
+        '''
+
+        session = self.session()
+
+        guild_query = session.query(AdminOptions).filter(
+            AdminOptions.guild_id == self.guild_id)
+
+        # if there are already entries for this guild, updates them
+        if guild_query.count():
+            if guild_query[-1].react_role_dict:
+
+                curr_dict = json.loads(guild_query[-1].react_role_dict)
+                curr_dict.update(react_role_dict)
+
+                guild_query[-1].react_role_dict = json.dumps(curr_dict)
+                session.commit()
+            else:
+                guild_query[-1].react_role_dict = json.dumps(react_role_dict)
+                session.commit()
+
+        # if there are no entries for this guild, creates entry
+        else:
+            admin_options = AdminOptions()
+            admin_options.guild_id = self.guild_id
+            admin_options.react_role_dict = json.dumps(react_role_dict)
+            session.add(admin_options)
+            session.commit()
+
+        session.close()
+
     @property
     def default_role_id(self):
         '''
@@ -263,3 +355,53 @@ class dbAutoMod(dbManager):
             return ["nenhuma palavra banida"]
 
         return admin_options[-1].cursed_words.split(',')
+
+    @property
+    def home_msg_id(self):
+        '''
+        Gets the home channel message id.
+
+        Args:
+            None.
+
+        Returns:
+            - home_msg_id (int): ID of the home channel message.
+
+        '''
+
+        session = self.session()
+
+        admin_options = session.query(AdminOptions).filter(
+            AdminOptions.guild_id == self.guild_id)
+
+        session.close()
+
+        if not admin_options.count() or not int(admin_options[-1].home_msg_id):
+            return 0
+
+        return int(admin_options[-1].home_msg_id)
+
+    @property
+    def react_role_dict(self):
+        '''
+        Gets the {"react": role_id} dict
+
+        Args:
+            None.
+
+        Returns:
+            - react_role_dict (dict): dict containing reacts and role_ids
+                that they point to.
+
+        '''
+
+        session = self.session()
+
+        admin_options = session.query(AdminOptions).filter(
+            AdminOptions.guild_id == self.guild_id)
+
+        session.close()
+
+        react_role_dict = json.loads(admin_options[-1].react_role_dict)
+
+        return react_role_dict
