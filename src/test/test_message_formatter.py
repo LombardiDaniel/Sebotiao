@@ -38,11 +38,5 @@ class TestMessage(unittest.TestCase):
         # Tests result type
         self.assertIsInstance(result, type(embed_obj))
 
-    def test_ajuda_msg(self):
-        '''
-        Tests for `ajuda()`.
-        '''
-        self.assertRaises(KeyError, MessageFormater.ajuda, our_input='asdfasdf')
-
 if __name__ == '__main__':
     unittest.main()
