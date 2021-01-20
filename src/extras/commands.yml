@@ -6,6 +6,11 @@ automod:
             msg: "recursivo, quando um comando é passado como argumento, serão mostrado detalhes."
             args: "`COMANDO` (opcional)"
 
+        development:
+            aliases: "dev,development,git,info,status,-v,--version"
+            msg: "fala informações sobre o desenvolvimento do bot"
+            args: "Nenhum"
+
         set_default_role:
             aliases: "set_def_role,update_def_role,update_default_role"
             msg: "configura o role/cargo default que o automod colocará nos novos membros."

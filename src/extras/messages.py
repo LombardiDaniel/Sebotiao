@@ -3,7 +3,9 @@
 Creates the formated messages to be sent on to the discord.
 
 '''
+from datetime import datetime
 
+import requests
 import yaml
 
 from discord import Embed
@@ -45,7 +47,7 @@ class MessageFormater:
                 for key, value in commands_dict[our_input]['commands'].items():
                     message += f"> `{key}`: {value['msg']}\n"
 
-                message += "\nEvie: `tiao ajuda COMANDO` para mais detalhes\n"
+                message += '\nEnvie: `tiao ajuda COMANDO` para mais detalhes\n'
 
             # O argumento passado é um comando, não uma categoria
             except KeyError:
@@ -73,6 +75,9 @@ class MessageFormater:
                 message += f"> `{name}`: {module['msg']}\n"
 
             message += '\nEnvie `tiao ajuda CATEGORIA` para mais detalhes\n'
+
+        message += "\n> Obs: Lembre de utilizar `tiao ` antes de qualquer comando.\n"
+
         return message
 
     @staticmethod
@@ -98,14 +103,48 @@ class MessageFormater:
         '''
         return f'Aqui nois nao usa esses termo nao blz.Fas o favor <@{user_id}> obrigado .'
 
-    # @staticmethod
-    # def stream_notification(user_id, twitch_url):
-    #     message = Embed(
-    #         title='Ta na hora de ver uma live braba!',
-    #         url=twitch_url,
-    #         color=Colours.bright_green
-    #     )
-    #
-    #     # message.add_field('')
-    #
-    #     message.set_footer('Venha para o pântano!')
+    @staticmethod
+    def development():
+        '''
+        Uses the request to check for info about the current git version.
+
+        Args:
+            None.
+        Returns:
+            - info (Embed obj.): Embed containing the info about current development
+                state of Sebotiao.
+        '''
+
+        url = "https://api.github.com/repos/LombardiDaniel/Sebotiao"
+
+        request = requests.get(url).json()
+
+        embed_obj = Embed(
+            title=request['name'],
+            url=request['html_url'],
+            description=request['description'],
+            color=constants.Colours.bright_green)
+
+        embed_obj.set_thumbnail(
+            url="https://raw.githubusercontent.com/LombardiDaniel/Sebotiao/master/LOGO.png")
+
+        lst_contributors = requests.get(url + '/contributors').json()
+        embed_obj.add_field(
+            name='Principais colaboradores:',
+            value=", ".join([contributor['login'] for contributor in lst_contributors[0:4]]),
+            inline=True)
+
+        date_time_obj = datetime.strptime(request['updated_at'], '%Y-%m-%dT%H:%M:%SZ')
+        delta = datetime.now() - date_time_obj
+
+        msg = f"{delta.seconds//3600} horas atrás" if delta.days < 1 else f"{delta.days} dias atrás"
+
+        embed_obj.add_field(
+            name='Último Update:',
+            value=msg,
+            inline=True)
+
+        releases = requests.get(url + '/releases').json()[0]
+        embed_obj.set_footer(text=f"{releases['tag_name']}")
+
+        return embed_obj

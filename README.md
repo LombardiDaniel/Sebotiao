@@ -1,5 +1,6 @@
 [![MIT License](https://img.shields.io/github/license/LombardiDaniel/Sebotiao.svg?style=for-the-badge&logo=LibreOffice&logoColor=white)](LICENSE.md)
 [![Build](https://img.shields.io/github/workflow/status/LombardiDaniel/Sebotiao/Builds%20bot%20update/master?style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/LombardiDaniel/Sebotiao/actions)
+[![tag](https://img.shields.io/github/v/release/LombardiDaniel/Sebotiao?style=for-the-badge)](https://github.com/LombardiDaniel/Sebotiao/releases)
 
 <br />
 <p align="center">
@@ -23,7 +24,6 @@
 -   [Desenvolvendo](#desenvolvendo)
     -   [Pré requisitos](#pré-requisitos)
     -   [Organização do Projeto](#organização-do-projeto)
--   [Roadmap](#roadmap)
 -   [License](#license)
 
 ### Sobre o Projeto
@@ -83,3 +83,4 @@ Crie um bot [por aqui](https://discord.com/developers/applications/) e lembre-se
 ### License
 
 Este projeto está sob a Licença MIT - veja o arquivo [LICENSE.md](LICENSE.md) para detalhes.
+kkkj
