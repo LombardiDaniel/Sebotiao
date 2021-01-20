@@ -1,5 +1,7 @@
 import os
 
+import json
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -250,6 +252,51 @@ class dbAutoMod(dbManager):
                     cursed_words = ','.join(curr_words)
                 session.commit()
 
+        session.close()
+
+    def add_react_role(self, react_role_dict):
+        '''
+        Adds/Updates the current ract_role_dictionary.
+
+        Args:
+            - react_role_dict (dict): dictionary in the format:
+                {
+                    "react_emote": role_id,
+                }
+
+        Returns:
+            None.
+
+        '''
+
+        session = self.session()
+
+        guild_query = session.query(AdminOptions).filter(
+            AdminOptions.guild_id == self.guild_id)
+
+        # if there are already entries for this guild, updates them
+        if guild_query.count():
+            if guild_query[-1].react_role_dict:
+
+                curr_dict = json.loads(guild_query[-1].react_role_dict)
+                curr_dict.update(react_role_dict)
+
+                guild_query[-1].react_role_dict = json.dumps(curr_dict)
+                session.commit()
+            else:
+                guild_query[-1].react_role_dict = json.dumps(react_role_dict)
+                session.commit()
+
+        # if there are no entries for this guild, creates entry
+        else:
+            admin_options = AdminOptions()
+            admin_options.guild_id = self.guild_id
+            admin_options.react_role_dict = json.dumps(react_role_dict)
+            session.add(admin_options)
+            session.commit()
+
+        session.close()
+
     @property
     def default_role_id(self):
         '''
@@ -328,3 +375,28 @@ class dbAutoMod(dbManager):
             return 0
 
         return int(admin_options[-1].home_msg_id)
+
+    @property
+    def react_role_dict(self):
+        '''
+        Gets the {"react": role_id} dict
+
+        Args:
+            None.
+
+        Returns:
+            - react_role_dict (dict): dict containing reacts and role_ids
+                that they point to.
+
+        '''
+
+        session = self.session()
+
+        admin_options = session.query(AdminOptions).filter(
+            AdminOptions.guild_id == self.guild_id)
+
+        session.close()
+
+        react_role_dict = json.loads(admin_options[-1].react_role_dict)
+
+        return react_role_dict

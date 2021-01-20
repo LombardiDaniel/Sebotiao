@@ -1,24 +1,29 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Text
 from run import Base
 
 
 class AdminOptions(Base):
     '''
-    Admin Model for storage of automod settings.
+    Admin Model Table for storage of automod settings.
 
-    Fields:
+    Rows:
         - guild_id (int): ID of the discord guild.
         - default_role_id (str): ID of the default role.
+        - home_msg_id (str): ID of the home message.
         - cursed_words (str): String containing all cursed words;
             Created by: ','.join(cursed_words: lst);
+        - react_role_dict (str): String contining parsed json dictionary
+            {"react_emote": role_id, }
 
     '''
     __tablename__ = "admin_options"
 
-    guild_id = Column('guild_id', String(100))
     id = Column('id', Integer, primary_key=True)
+
+    guild_id = Column('guild_id', String(100))
     default_role_id = Column('default_role_id', String(100), nullable=True)
     home_msg_id = Column('home_msg_id', String(100), nullable=True)
+    react_role_dict = Column('react_role_dict', Text, nullable=True)
     cursed_words = Column('cursed_words', String(500), nullable=True)
 
 
