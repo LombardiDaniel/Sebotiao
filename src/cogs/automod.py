@@ -226,13 +226,10 @@ class AutoModerator(commands.Cog):
 
         if mod.home_msg_id:
             if def_role is not None:
-                if len(member.roles) == 1:
-                    await member.add_roles(def_role)
-                    docker_log(
-                        f'AutoMod set autoRole for {member.id} @ {member.guild.id}')
-                else:
-                    docker_log(
-                        f'{member.id} @ {member.guild.id} already has a role.')
+                await member.add_roles(def_role)
+                docker_log(
+                    f'AutoMod set autoRole for {member.id} @ {member.guild.id}')
+
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
