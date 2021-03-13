@@ -41,6 +41,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Tests docker build
-        run: |
-          ls
-          docker image build -t test_image .
+        run: docker build -t test_image .
