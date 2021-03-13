@@ -15,8 +15,8 @@ COMMAND_PREFIXES = ['tiao ', 'ei ', 'psiu ', 'Tiao']
 
 RESPOSTA_CHINGO = [
     "Bolsonaro e seus familiares.estam trabalhando o melhor que podem.nao julgue para nao ser julgado BOM DIA",
-    """Não conheço um eleitor do Bolsonaro que esteja arrependido, pelo contrário, já iniciamos a campanha para 2022.
-    É o melhor presidente de todos os tempos.""",
+    "Não conheço um eleitor do Bolsonaro que esteja arrependido, pelo contrário, já iniciamos a campanha para 2022. " +
+        "É o melhor presidente de todos os tempos.",
     "Bolsonaro e um bom presientente pare de torcer contra ta",
     "Ah é? E o Lula? E o PT?",
 ]
@@ -43,6 +43,5 @@ POSITIVE_RESPONSES = [
 NEGATIVE_RESPONSES = [
     "sei nao ein",
     ":poop: :poop: :poop:",
-    "vc n pode pedir isso :joy:",
     ":thumbsdown:"
 ]

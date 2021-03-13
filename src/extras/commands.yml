@@ -48,3 +48,13 @@ autorole:
             aliases: "remove_home_channel,remove_welcome_msg,remove_home_msg,unset_home_channel"
             msg: "Remove o canal de entrada. (Obs: você deve configurar as permissões)"
             args: "Nenhum"
+
+        set_react_role_message:
+            aliases: ""
+            msg: "Seta a mensagem que o bot irá monitorar para dar cargos por react"
+            args: "`ID_DA_MENSAGEM`"
+
+        add_react_role:
+            aliases: "update_react_role,add_react_role_combo,update_react_role_combo"
+            msg: "Adiciona/Atualiza um cargo para react específico"
+            args: "\"`TIPO_DE_REACT`;`NOME_DO_CARGO`\""

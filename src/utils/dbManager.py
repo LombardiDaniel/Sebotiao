@@ -41,7 +41,7 @@ class dbManager:
 
         # If debug mode, creates local sqlite database
         if int(os.environ.get('DEBUG')):
-            self.engine = create_engine(f'sqlite:////devdb/sqlite.db', echo=True)
+            self.engine = create_engine(f'sqlite:////devdb/sqlite.db', echo=False)
             docker_log("Connected to SQLITE DB (Do NOT use in production)", lvl="WARNING")
         else:
             # Raises an error if any of the needed env vars were not declared
@@ -74,13 +74,139 @@ class dbAutoMod(dbManager):
         - guild_id (str): string containing the guild id.
 
     Attributes:
-        - default_role_id (int): the id of the default role.
         - cursed_words (lst): List of all cursed words stored in the database.
 
     Methods:
-        - update_default_role: Updates the default role in database.
         - add_cursed_words: Adds a new cursed word to the database.
         - remove_cursed_words: Removes a cursed word from the database.
+    '''
+
+    def add_cursed_words(self, words):
+        '''
+        Adds/Updates the current list of cursed words.
+
+        Args:
+            - words (lst): List of words to add to cursed_words.
+
+        Returns:
+            None.
+
+        '''
+        session = self.session()
+
+        guild_query = session.query(AdminOptions).filter(
+            AdminOptions.guild_id == self.guild_id)
+
+        # if there are already entries for this guild, updates them
+        if guild_query.count():
+            if guild_query[-1].cursed_words:
+
+                new_words = set(words + guild_query[-1].cursed_words.split(','))
+
+                guild_query[-1].\
+                    cursed_words = ','.join(new_words)
+
+                session.commit()
+            else:
+                guild_query[-1].cursed_words = ','.join(set(words))
+                session.commit()
+
+        # if there are no entries for this guild, creates entry
+        else:
+            admin_options = AdminOptions()
+            admin_options.guild_id = self.guild_id
+            admin_options.cursed_words = ','.join(set(words))
+            session.add(admin_options)
+            session.commit()
+
+        session.close()
+
+    def remove_cursed_words(self, words):
+        '''
+        Removes the current list of cursed words.
+
+        Args:
+            - words (lst): List of words to remove from cursed_words.
+
+        Returns:
+            None.
+
+        '''
+        session = self.session()
+
+        guild_query = session.query(AdminOptions).filter(
+            AdminOptions.guild_id == self.guild_id)
+
+        # if there are already entries for this guild, updates them
+        if guild_query.count():
+            if guild_query[-1].cursed_words:
+
+                # Removes words
+                curr_words = guild_query[-1].cursed_words.split(',')
+                for word in words:
+                    if word in curr_words:
+                        curr_words.remove(word)
+                        break
+
+                # Updates table
+                guild_query[-1].\
+                    cursed_words = ','.join(set(curr_words))
+                session.commit()
+
+        session.close()
+
+    @property
+    def cursed_words(self):
+        '''
+        Gets the default role for new users from database.
+
+        Args:
+            None.
+
+        Returns:
+            - cursed_words (lst): List of all cursed words stored in db.
+
+        '''
+
+        session = self.session()
+
+        admin_options = session.query(AdminOptions).filter(
+            AdminOptions.guild_id == self.guild_id)
+
+        session.close()
+
+        if not admin_options.count():
+            return ["sem configuração"]
+        if not admin_options[-1].cursed_words:
+            return ["nenhuma palavra banida"]
+
+        return admin_options[-1].cursed_words.split(',')
+
+
+
+
+class dbAutoRole(dbManager):
+    '''
+    This class that abstracts the interaction with the database, offering simpler methods.
+    When creating an object from this class, all methods will use self.guild_id to
+    select what row should be altered in the desired table.
+
+    Args:
+        - guild_id (str): string containing the guild id.
+
+    Attributes:
+        - default_role_id (int): ID of the default role.
+        - home_msg_id (int): ID of home welcome message.
+        - react_role_dict (dict): dictionary {"emoji_id": role_id}.
+        - react_role_msg_id (int): ID of react/role msg.
+
+    Methods:
+        - update_default_role: Updates the default role in database.
+        - set_welcome_channel: Sets the welcome channel in db.
+        - remove_welcome_channel: Removes the welcome channel in db.
+        - set_react_role_message: Sets the react/role message.
+        - add_react_role: Adds a react/role combo to db.
+
     '''
 
     def update_default_role(self, default_role_id):
@@ -185,17 +311,15 @@ class dbAutoMod(dbManager):
 
         session.close()
 
-    def add_cursed_words(self, words):
+    def set_react_role_message(self, message_id):
         '''
-        Adds/Updates the current list of cursed words.
-
+        Adds/Updates the current ract_role_message_id.
         Args:
-            - words (lst): List of words to add to cursed_words.
-
+            - message_id (int): ID of message from react_role.
         Returns:
             None.
-
         '''
+
         session = self.session()
 
         guild_query = session.query(AdminOptions).filter(
@@ -203,61 +327,19 @@ class dbAutoMod(dbManager):
 
         # if there are already entries for this guild, updates them
         if guild_query.count():
-            if guild_query[-1].cursed_words:
-
-                new_words = set(words + guild_query[-1].cursed_words.split(','))
-
-                guild_query[-1].\
-                    cursed_words = ','.join(new_words)
-
-                session.commit()
-            else:
-                guild_query[-1].cursed_words = ','.join(set(words))
-                session.commit()
+            guild_query[-1].ract_role_message_id = str(message_id)
+            session.commit()
 
         # if there are no entries for this guild, creates entry
         else:
             admin_options = AdminOptions()
             admin_options.guild_id = self.guild_id
-            admin_options.cursed_words = ','.join(set(words))
+            admin_options.ract_role_message_id = str(message_id)
             session.add(admin_options)
             session.commit()
 
         session.close()
 
-    def remove_cursed_words(self, words):
-        '''
-        Removes the current list of cursed words.
-
-        Args:
-            - words (lst): List of words to remove from cursed_words.
-
-        Returns:
-            None.
-
-        '''
-        session = self.session()
-
-        guild_query = session.query(AdminOptions).filter(
-            AdminOptions.guild_id == self.guild_id)
-
-        # if there are already entries for this guild, updates them
-        if guild_query.count():
-            if guild_query[-1].cursed_words:
-
-                # Removes words
-                curr_words = guild_query[-1].cursed_words.split(',')
-                for word in words:
-                    if word in curr_words:
-                        curr_words.remove(word)
-                        break
-
-                # Updates table
-                guild_query[-1].\
-                    cursed_words = ','.join(set(curr_words))
-                session.commit()
-
-        session.close()
 
     def add_react_role(self, react_role_dict):
         '''
@@ -330,33 +412,6 @@ class dbAutoMod(dbManager):
         return int(admin_options[-1].default_role_id)
 
     @property
-    def cursed_words(self):
-        '''
-        Gets the default role for new users from database.
-
-        Args:
-            None.
-
-        Returns:
-            - cursed_words (lst): List of all cursed words stored in db.
-
-        '''
-
-        session = self.session()
-
-        admin_options = session.query(AdminOptions).filter(
-            AdminOptions.guild_id == self.guild_id)
-
-        session.close()
-
-        if not admin_options.count():
-            return ["sem configuração"]
-        if not admin_options[-1].cursed_words:
-            return ["nenhuma palavra banida"]
-
-        return admin_options[-1].cursed_words.split(',')
-
-    @property
     def home_msg_id(self):
         '''
         Gets the home channel message id.
@@ -384,7 +439,7 @@ class dbAutoMod(dbManager):
     @property
     def react_role_dict(self):
         '''
-        Gets the {"react": role_id} dict
+        Gets the {"emoji_id": role_id} dict
 
         Args:
             None.
@@ -405,3 +460,25 @@ class dbAutoMod(dbManager):
         react_role_dict = json.loads(admin_options[-1].react_role_dict)
 
         return react_role_dict
+
+    @property
+    def react_role_msg_id(self):
+        '''
+        Gets the {"emoji_id": role_id} message_id
+
+        Args:
+            None.
+
+        Returns:
+            - react_role_msg_id (int): ID of message to monitor.
+
+        '''
+
+        session = self.session()
+
+        admin_options = session.query(AdminOptions).filter(
+            AdminOptions.guild_id == self.guild_id)
+
+        session.close()
+
+        return int(admin_options[-1].ract_role_message_id)

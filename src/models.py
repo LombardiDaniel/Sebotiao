@@ -13,7 +13,8 @@ class AdminOptions(Base):
         - cursed_words (str): String containing all cursed words;
             Created by: ','.join(cursed_words: lst);
         - react_role_dict (str): String contining parsed json dictionary
-            {"react_emote": role_id, }
+            {"emote_id": role_id, }
+        - ract_role_message_id (str): ID of the react_role message.
 
     '''
     __tablename__ = "admin_options"
@@ -24,6 +25,7 @@ class AdminOptions(Base):
     default_role_id = Column('default_role_id', String(100), nullable=True)
     home_msg_id = Column('home_msg_id', String(100), nullable=True)
     react_role_dict = Column('react_role_dict', Text, nullable=True)
+    ract_role_message_id = Column('ract_role_message_id', String(100), nullable=True)
     cursed_words = Column('cursed_words', String(500), nullable=True)
 
 

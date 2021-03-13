@@ -13,7 +13,7 @@ def admin_only(command_func):
     async def wrap(self, ctx, *args, **kwargs):
 
         if not ctx.author.guild_permissions.administrator:
-            await ctx.message.channel.send(choice(constants.NEGATIVE_RESPONSES))
+            await ctx.message.channel.send("vc n pode pedir isso :joy: :joy: :joy:")
             return
 
         return await command_func(self, ctx, *args, **kwargs)
