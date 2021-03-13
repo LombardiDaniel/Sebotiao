@@ -42,4 +42,5 @@ jobs:
     steps:
       - name: Tests docker build
         run: |
+          ls
           docker image build -t test_image .
