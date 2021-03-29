@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 
 from utils.docker import docker_log
-from utils.dbManager import dbAutoMod
+from utils.dbManager import dbAutoMod, dbAutoRole
 from utils.decorators import admin_only
 from extras import constants
 from extras.messages import MessageFormater
@@ -127,7 +127,7 @@ class AutoModerator(commands.Cog):
         '''
         When a member joins.
         '''
-        mod = dbAutoMod(member.guild.id)
+        mod = dbAutoRole(member.guild.id)
         def_role = discord.utils.get(member.guild.roles, id=mod.default_role_id)
 
         # mod.home_msg_id == 0 means that autorole is managed by home channel

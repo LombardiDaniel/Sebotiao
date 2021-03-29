@@ -41,7 +41,7 @@ class dbManager:
 
         # If debug mode, creates local sqlite database
         if int(os.environ.get('DEBUG')):
-            self.engine = create_engine(f'sqlite:////devdb/sqlite.db', echo=False)
+            self.engine = create_engine('sqlite:////devdb/sqlite.db', echo=False)
             docker_log("Connected to SQLITE DB (Do NOT use in production)", lvl="WARNING")
         else:
             # Raises an error if any of the needed env vars were not declared
