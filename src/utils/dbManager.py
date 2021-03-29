@@ -2,6 +2,8 @@ import os
 
 import json
 
+from abc import ABC#, abstractmethod
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -11,7 +13,7 @@ from run import Base
 from utils.docker import docker_log
 
 
-class dbManager:
+class dbManager(ABC):
     '''
     This class creates the db engine for use in all sub-classes.
     The ID of discord Snowflake Objects are stored as strings in the database.
