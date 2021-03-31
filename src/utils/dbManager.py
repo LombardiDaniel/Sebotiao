@@ -60,7 +60,7 @@ class dbManager(ABC):
             self.engine = create_engine(
                 f'postgresql+psycopg2://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}',
                 echo=False)
-            docker_log("Created connection to db")
+            docker_log("Created connection to PostgreSQL")
 
         Base.metadata.create_all(bind=self.engine)
         self.session = sessionmaker(bind=self.engine)
