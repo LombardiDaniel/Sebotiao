@@ -433,7 +433,7 @@ class dbAutoRole(dbManager):
 
         session.close()
 
-        if not admin_options.count() or not int(admin_options[-1].home_msg_id):
+        if not admin_options.count() or admin_options[-1].home_msg_id is None:
             return 0
 
         return int(admin_options[-1].home_msg_id)
