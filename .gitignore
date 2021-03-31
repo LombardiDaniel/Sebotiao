@@ -16,4 +16,4 @@
 *.log
 
 # send_to_srv
-copy_to_pi.sh
+CD.sh
