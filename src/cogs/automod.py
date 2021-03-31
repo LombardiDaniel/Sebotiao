@@ -130,12 +130,14 @@ class AutoModerator(commands.Cog):
         mod = dbAutoRole(member.guild.id)
         def_role = discord.utils.get(member.guild.roles, id=mod.default_role_id)
 
+
+        # TODO: add welcome msg for newcomer
         # mod.home_msg_id == 0 means that autorole is managed by home channel
-        if not mod.home_msg_id:
-            if def_role is not None:
-                await member.add_roles(def_role)
-                docker_log(
-                    f'AutoMod set autoRole for {member.id} @ {member.guild.id}')
+        # if not mod.home_msg_id:
+        #     if def_role is not None:
+        #         await member.add_roles(def_role)
+        #         docker_log(
+        #             f'AutoMod set autoRole for {member.id} @ {member.guild.id}')
 
 
 def setup(client):
