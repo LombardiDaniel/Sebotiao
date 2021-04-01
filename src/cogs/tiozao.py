@@ -4,7 +4,6 @@ from random import choice
 from discord.ext import commands
 
 
-# from utils.docker import docker_log
 from extras import constants
 # from extras.messages import MessageFormater
 

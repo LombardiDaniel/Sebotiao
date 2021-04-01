@@ -12,6 +12,8 @@ services:
             - ./env/.env.db
         depends_on:
             - db
+        volumes:
+            - ./logs:/discord-bot/src/logs
 
     db:
         image: postgres

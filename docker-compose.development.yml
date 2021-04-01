@@ -11,6 +11,7 @@ services:
             - ./env/.env.dev
         volumes:
             - dev_bot_db:/devdb/
+            - ./logs:/discord-bot/src/logs
 
 volumes:
     dev_bot_db:

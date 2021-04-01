@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 from models import AdminOptions
 from run import Base
 
-from utils.docker import docker_log
+from utils.docker import DockerLogger
 
 
 class dbManager(ABC):
@@ -31,6 +31,8 @@ class dbManager(ABC):
     '''
 
     def __init__(self, guild_id):
+        self.logger = DockerLogger(prefix='dbManager', lvl=DockerLogger.INFO)
+
         self.guild_id = str(guild_id)
         db_user = os.environ.get('POSTGRES_USER')
         db_pass = os.environ.get('POSTGRES_PASSWORD')
@@ -44,7 +46,7 @@ class dbManager(ABC):
         # If debug mode, creates local sqlite database
         if int(os.environ.get('DEBUG')):
             self.engine = create_engine('sqlite:////devdb/sqlite.db', echo=False)
-            docker_log("Connected to SQLITE DB (Do NOT use in production)", lvl="WARNING")
+            self.logger.log("Connected to SQLITE DB (Do NOT use in production)", lvl=DockerLogger.WARNING)
         else:
             # Raises an error if any of the needed env vars were not declared
             if any(not var for var in [db_user, db_pass, db_name, db_port]):
@@ -60,7 +62,6 @@ class dbManager(ABC):
             self.engine = create_engine(
                 f'postgresql+psycopg2://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}',
                 echo=False)
-            docker_log("Created connection to PostgreSQL")
 
         Base.metadata.create_all(bind=self.engine)
         self.session = sessionmaker(bind=self.engine)
@@ -95,6 +96,7 @@ class dbAutoMod(dbManager):
 
         '''
         session = self.session()
+        self.logger.log("created connection to db", lvl=self.INFO)
 
         guild_query = session.query(AdminOptions).filter(
             AdminOptions.guild_id == self.guild_id)
@@ -122,6 +124,7 @@ class dbAutoMod(dbManager):
             session.commit()
 
         session.close()
+        self.logger.log("connection closed", lvl=self.INFO)
 
     def remove_cursed_words(self, words):
         '''
@@ -135,6 +138,7 @@ class dbAutoMod(dbManager):
 
         '''
         session = self.session()
+        self.logger.log("created connection to db", lvl=self.INFO)
 
         guild_query = session.query(AdminOptions).filter(
             AdminOptions.guild_id == self.guild_id)
@@ -156,6 +160,7 @@ class dbAutoMod(dbManager):
                 session.commit()
 
         session.close()
+        self.logger.log("connection closed", lvl=self.INFO)
 
     @property
     def cursed_words(self):
@@ -171,11 +176,13 @@ class dbAutoMod(dbManager):
         '''
 
         session = self.session()
+        self.logger.log("created connection to db", lvl=self.INFO)
 
         admin_options = session.query(AdminOptions).filter(
             AdminOptions.guild_id == self.guild_id)
 
         session.close()
+        self.logger.log("connection closed", lvl=self.INFO)
 
         if not admin_options.count():
             return ["sem configuração"]
@@ -226,6 +233,7 @@ class dbAutoRole(dbManager):
         default_role_id = str(default_role_id)
 
         session = self.session()
+        self.logger.log("created connection to db", lvl=self.INFO)
 
         guild_query = session.query(AdminOptions).filter(
             AdminOptions.guild_id == self.guild_id)
@@ -245,6 +253,7 @@ class dbAutoRole(dbManager):
             session.commit()
 
         session.close()
+        self.logger.log("connection closed", lvl=self.INFO)
 
     def set_welcome_channel(self, home_msg_id):
         '''
@@ -261,6 +270,7 @@ class dbAutoRole(dbManager):
         home_msg_id = str(home_msg_id)
 
         session = self.session()
+        self.logger.log("created connection to db", lvl=self.INFO)
 
         guild_query = session.query(AdminOptions).filter(
             AdminOptions.guild_id == self.guild_id)
@@ -279,6 +289,7 @@ class dbAutoRole(dbManager):
             session.commit()
 
         session.close()
+        self.logger.log("connection closed", lvl=self.INFO)
 
     def remove_welcome_channel(self):
         '''
@@ -293,6 +304,7 @@ class dbAutoRole(dbManager):
         '''
 
         session = self.session()
+        self.logger.log("created connection to db", lvl=self.INFO)
 
         guild_query = session.query(AdminOptions).filter(
             AdminOptions.guild_id == self.guild_id)
@@ -312,6 +324,7 @@ class dbAutoRole(dbManager):
             session.commit()
 
         session.close()
+        self.logger.log("connection closed", lvl=self.INFO)
 
     def set_react_role_message(self, message_id):
         '''
@@ -323,6 +336,7 @@ class dbAutoRole(dbManager):
         '''
 
         session = self.session()
+        self.logger.log("created connection to db", lvl=self.INFO)
 
         guild_query = session.query(AdminOptions).filter(
             AdminOptions.guild_id == self.guild_id)
@@ -341,6 +355,7 @@ class dbAutoRole(dbManager):
             session.commit()
 
         session.close()
+        self.logger.log("connection closed", lvl=self.INFO)
 
 
     def add_react_role(self, react_role_dict):
@@ -359,6 +374,7 @@ class dbAutoRole(dbManager):
         '''
 
         session = self.session()
+        self.logger.log("created connection to db", lvl=self.INFO)
 
         guild_query = session.query(AdminOptions).filter(
             AdminOptions.guild_id == self.guild_id)
@@ -385,6 +401,7 @@ class dbAutoRole(dbManager):
             session.commit()
 
         session.close()
+        self.logger.log("connection closed", lvl=self.INFO)
 
     @property
     def default_role_id(self):
@@ -400,11 +417,13 @@ class dbAutoRole(dbManager):
         '''
 
         session = self.session()
+        self.logger.log("created connection to db", lvl=self.INFO)
 
         admin_options = session.query(AdminOptions).filter(
             AdminOptions.guild_id == self.guild_id)
 
         session.close()
+        self.logger.log("connection closed", lvl=self.INFO)
 
         if not admin_options.count():
             return None
@@ -427,11 +446,13 @@ class dbAutoRole(dbManager):
         '''
 
         session = self.session()
+        self.logger.log("created connection to db", lvl=self.INFO)
 
         admin_options = session.query(AdminOptions).filter(
             AdminOptions.guild_id == self.guild_id)
 
         session.close()
+        self.logger.log("connection closed", lvl=self.INFO)
 
         if not admin_options.count() or admin_options[-1].home_msg_id is None:
             return 0
@@ -453,11 +474,13 @@ class dbAutoRole(dbManager):
         '''
 
         session = self.session()
+        self.logger.log("created connection to db", lvl=self.INFO)
 
         admin_options = session.query(AdminOptions).filter(
             AdminOptions.guild_id == self.guild_id)
 
         session.close()
+        self.logger.log("connection closed", lvl=self.INFO)
 
         react_role_dict = json.loads(admin_options[-1].react_role_dict)
 
@@ -477,10 +500,12 @@ class dbAutoRole(dbManager):
         '''
 
         session = self.session()
+        self.logger.log("created connection to db", lvl=self.INFO)
 
         admin_options = session.query(AdminOptions).filter(
             AdminOptions.guild_id == self.guild_id)
 
         session.close()
+        self.logger.log("connection closed", lvl=self.INFO)
 
         return int(admin_options[-1].ract_role_message_id)

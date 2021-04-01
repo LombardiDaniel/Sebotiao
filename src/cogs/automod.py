@@ -4,7 +4,7 @@ from random import choice
 import discord
 from discord.ext import commands
 
-from utils.docker import docker_log
+from utils.docker import DockerLogger
 from utils.dbManager import dbAutoMod, dbAutoRole
 from utils.decorators import admin_only
 from extras import constants
@@ -18,6 +18,7 @@ class AutoModerator(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        self.logger = DockerLogger(lvl=DockerLogger.INFO, prefix='AutoModerator')
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -29,7 +30,7 @@ class AutoModerator(commands.Cog):
         for guild in self.client.guilds:
             usr_num += len(guild.members)
 
-        docker_log(
+        self.logger.log(
             f'Logged-in on {len(self.client.guilds)}, at the reach of {usr_num} users')
 
         await self.client.change_presence(activity=discord.Game(name='Truco com o Wanderley'))
@@ -64,7 +65,7 @@ class AutoModerator(commands.Cog):
         mod = dbAutoMod(ctx.guild.id)
         mod.add_cursed_words(words)
 
-        docker_log(
+        self.logger.log(
             f'{ctx.guild.id} - {ctx.message.author.name} added cursed word(s): {our_input}')
         await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
 
@@ -97,7 +98,7 @@ class AutoModerator(commands.Cog):
         mod = dbAutoMod(ctx.guild.id)
         mod.remove_cursed_words(words)
 
-        docker_log(
+        self.logger.log(
             f'{ctx.guild.id} - {ctx.message.author.name} removed cursed word(s): {our_input}')
         await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
 
@@ -136,7 +137,7 @@ class AutoModerator(commands.Cog):
         # if not mod.home_msg_id:
         #     if def_role is not None:
         #         await member.add_roles(def_role)
-        #         docker_log(
+        #         self.logger.log(
         #             f'AutoMod set autoRole for {member.id} @ {member.guild.id}')
 
 

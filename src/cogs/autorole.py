@@ -4,7 +4,7 @@ from random import choice
 import discord
 from discord.ext import commands
 
-from utils.docker import docker_log
+from utils.docker import DockerLogger
 from utils.dbManager import dbAutoRole
 from utils.decorators import admin_only
 from extras import constants
@@ -18,6 +18,7 @@ class AutoRole(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        self.logger = DockerLogger(lvl=DockerLogger.INFO, prefix='AutoRole')
 
     @commands.command(name='set_default_role', aliases=[
         'set_def_role', 'update_def_role', 'update_default_role'
@@ -34,7 +35,7 @@ class AutoRole(commands.Cog):
         mod = dbAutoRole(ctx.guild.id)
         mod.update_default_role(role.id)
 
-        docker_log(
+        mod.logger.log(
             f'{ctx.guild.id} - {ctx.message.author.name} set default role as {role}')
         await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
 
@@ -105,7 +106,7 @@ class AutoRole(commands.Cog):
             for member in ctx.guild.members:
                 if len(member.roles) == 1:
                     await member.add_roles(def_role)
-                    docker_log(
+                    mod.logger.log(
                         f'AutoMod set Role for {member.id} @ {member.guild.id}')
 
             await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
@@ -197,7 +198,7 @@ class AutoRole(commands.Cog):
         if mod.home_msg_id:
             if def_role is not None and reaction.message.id == mod.home_msg_id:
                 await member.add_roles(def_role)
-                docker_log(
+                mod.logger.log(
                     f'AutoMod set autoRole for {member.id} @ {member.guild.id}')
 
         if mod.react_role_msg_id == ctx.message.id:
@@ -218,7 +219,7 @@ class AutoRole(commands.Cog):
         if not mod.home_msg_id:
             if def_role is not None:
                 await member.add_roles(def_role)
-                docker_log(
+                mod.logger.log(
                     f'AutoMod set autoRole for {member.id} @ {member.guild.id}')
 
 
