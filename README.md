@@ -24,6 +24,9 @@
 -   [Desenvolvendo](#desenvolvendo)
     -   [Pré requisitos](#pré-requisitos)
     -   [Organização do Projeto](#organização-do-projeto)
+        -   [Variáveis de Ambiente](#variáveis-de-ambiente)
+        -   [Chaves de Acesso](#chaves-de-acesso)
+        -   [Logs](#logs)
 -   [License](#license)
 
 ### Sobre o Projeto
@@ -59,13 +62,15 @@ Pessoalmente, recomendo que utilize docker. Nesse caso, utilize o [docker-compos
 
 De forma geral, o arquivo `src/run.py` roda o bot, utilizando os arquivos da pasta `cog` (leia mais sobre cogs [aqui](https://discordpy.readthedocs.io/en/latest/ext/commands/cogs.html)). As interações com a database são feitas pelo arquivo `src/utils/dbManager.py`, que simplifica o acesso utilizando a biblioteca sqlalchemy. Os modelos para criação das tabelas ficam no arquivo `src/models.py`.
 
+#### Variáveis de Ambiente
+
 As variáveis de ambiente que o container bot precisa são:
 
-| Nome da Variável | Significado                                                                                                                                                | Obrigatória |
-| :--------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------: |
-|     BOT_TOKEN    | Token do bot (disponibilizado pelo discord)                                                                                                                |     Sim     |
-|      DB_HOST     | IP (ou nome do container) da localidade da database                                                                                                        |     Não (default=`db`)     |
-|       DEBUG      | Se `1`, a database será SQLite no próprio diretório (único container docker); se `0`, é necessário um segundo container, contendo uma database PostgreSQL. |     Não (default=`0`)    |
+| Nome da Variável | Significado                                                                                                                                                |     Obrigatória    |
+| :--------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------: |
+|     BOT_TOKEN    | Token do bot (disponibilizado pelo discord)                                                                                                                |         Sim        |
+|      DB_HOST     | IP (ou nome do container) da localidade da database                                                                                                        | Não (default=`db`) |
+|       DEBUG      | Se `1`, a database será SQLite no próprio diretório (único container docker); se `0`, é necessário um segundo container, contendo uma database PostgreSQL. |  Não (default=`0`) |
 
 As variáveis de ambiente que o container da database precisa são:
 
@@ -76,9 +81,27 @@ As variáveis de ambiente que o container da database precisa são:
 | POSTGRES_PASSWORD | Senha para o acesso do usuário POSTGRES_USER                              |     Sim     |
 |   POSTGRES_PORT   | Porta em que a database será hosteada                                     |     Sim     |
 
+#### Chaves de Acesso
+
 As chaves de acesso para database e o token do bot do discord devem ser providenciados (gerados) por você.
 
 Crie um bot [por aqui](https://discord.com/developers/applications/) e lembre-se de permitir acesso de administrador e habilitar [intents](https://discordpy.readthedocs.io/en/latest/intents.html).
+
+#### Logs
+
+Para logs, você deve utilizar a classe `DockerLogger`, declarada no arquivo [src/utils/docker.py](src/utils/docker.py). Ela salva arquivos `.log` nos `host volumes` do docker, ou seja, é criada uma pasta `logs/` no diretório do projeto para que sejam salvos lá. E também imprime todos os logs no stdout, para facilitar o acesso por meios como `docker logs` e [portainer.io](https://www.portainer.io).
+
+Os arquivos `.log` são separados de acordo com o `prefix` especificados na inicialização do objeto. Este `prefix` também é usado para marcar no stdout. Formato dos logs:
+
+```py
+# Nos arquivos .log
+f"{self.lvl_str}; {str(datetime.now())[:-3]}; {msg};\n"
+
+# No stdout
+f"{lvl.upper()}; {str(datetime.now())[:-3]}; {msg};"
+```
+
+Caso esteja debugando, pode-se chamar o método estático `stdout_log`, da mesma classe. Este aceita `*args` e `**kwargs`, para auxiliar.
 
 ### License
 
