@@ -4,6 +4,12 @@ from datetime import datetime
 class DockerLogger:
     '''
     Basic Logger for .log files and stdout (for docker).
+
+    properties:
+        - prefix (str): Used for name of log_file and flag on stdout.
+        - path (str): Path of log_file.
+        - lvl (int by constant): Logger will log all messages flagged with higher
+            or equal to this.
     '''
 
     INFO = 1
@@ -30,13 +36,13 @@ class DockerLogger:
 
             if self.path is not None:
                 with open(self.path, 'a') as log_file:
-                    log_file.write(f'{self.lvl_str}; {str(datetime.now())[:-3]}; {msg};\n')
+                    log_file.write(f'{self._lvl_str(lvl)}; {str(datetime.now())[:-3]}; {msg};\n')
 
-            DockerLogger.stdout_log(msg, lvl=self.lvl_str, prefix=self.prefix)
+            DockerLogger.stdout_log(msg, lvl=self._lvl_str(lvl), prefix=self.prefix)
 
 
-    @property
-    def lvl_str(self):
+    @staticmethod
+    def _lvl_str(lvl):
         '''
         Converts lvl int to appropriate str.
         '''
@@ -48,7 +54,7 @@ class DockerLogger:
             'CRITICAL'
         ]
 
-        return lst_lvl[self.lvl - 1]
+        return lst_lvl[lvl - 1]
 
 
     @staticmethod

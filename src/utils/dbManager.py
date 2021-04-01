@@ -46,7 +46,8 @@ class dbManager(ABC):
         # If debug mode, creates local sqlite database
         if int(os.environ.get('DEBUG')):
             self.engine = create_engine('sqlite:////devdb/sqlite.db', echo=False)
-            self.logger.log("Connected to SQLITE DB (Do NOT use in production)", lvl=self.logger.WARNING)
+            self.logger.log("Connected to SQLITE DB (Do NOT use in production)",
+                lvl=self.logger.WARNING)
         else:
             # Raises an error if any of the needed env vars were not declared
             if any(not var for var in [db_user, db_pass, db_name, db_port]):
