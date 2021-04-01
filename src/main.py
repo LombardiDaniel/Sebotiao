@@ -28,8 +28,6 @@ client.remove_command('help')
 
 if __name__ == '__main__':
 
-    logger.log('Initializing bot...', lvl=DockerLogger.INFO)
-
     for filename in cogs:
         client.load_extension(f'cogs.{filename[:-3]}')
 
