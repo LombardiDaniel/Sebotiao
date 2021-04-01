@@ -12,7 +12,7 @@ class DockerLogger:
     CRITICAL = 4
 
 
-    def __init__(self, prefix, lvl=2):
+    def __init__(self, prefix, lvl):
         self.prefix = prefix
         self.path = f'./logs/{prefix}.log'
         self.lvl = lvl
@@ -30,9 +30,9 @@ class DockerLogger:
 
             if self.path is not None:
                 with open(self.path, 'a') as log_file:
-                    log_file.write(f'{self.lvl_str}; {str(datetime.now())[:-3]}; {msg};')
+                    log_file.write(f'{self.lvl_str}; {str(datetime.now())[:-3]}; {msg};\n')
 
-            DockerLogger.docker_log(msg, lvl=self.lvl_str, prefix=self.prefix)
+            DockerLogger.stdout_log(msg, lvl=self.lvl_str, prefix=self.prefix)
 
 
     @property
@@ -48,11 +48,11 @@ class DockerLogger:
             'CRITICAL'
         ]
 
-        return lst_lvl[self.lvl + 1]
+        return lst_lvl[self.lvl - 1]
 
 
     @staticmethod
-    def docker_log(msg, lvl='INFO', **kwargs):
+    def stdout_log(msg, lvl='INFO', **kwargs):
         '''
         Simple function to log to stdout.
 
