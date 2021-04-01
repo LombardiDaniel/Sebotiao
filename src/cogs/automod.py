@@ -31,7 +31,7 @@ class AutoModerator(commands.Cog):
             usr_num += len(guild.members)
 
         self.logger.log(
-            msg=f'Logged-in on {len(self.client.guilds)}, at the reach of {usr_num} users',
+            msg=f'Logged-in on {len(self.client.guilds)} servers, at the reach of {usr_num} users',
             lvl=self.logger.INFO)
 
         await self.client.change_presence(activity=discord.Game(name='Truco com o Wanderley'))
