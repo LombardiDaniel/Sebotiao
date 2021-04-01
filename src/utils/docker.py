@@ -17,7 +17,7 @@ class DockerLogger:
         self.path = f'./logs/{prefix}.log'
         self.lvl = lvl
 
-    def log(self, msg, lvl=DockerLogger.WARNING):
+    def log(self, msg, lvl=2):
         '''
         Simple function to log to stdout.
 
