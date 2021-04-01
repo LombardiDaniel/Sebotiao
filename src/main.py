@@ -34,6 +34,7 @@ if __name__ == '__main__':
     TOKEN = os.environ.get('BOT_TOKEN')
 
     if not TOKEN:
+        logger.log('Error when trying to read BOT_TOKEN env var.', lvl=DockerLogger.ERROR)
         raise NameError("Missing env variable: BOT_TOKEN")
 
     logger.log('Initialization Complete', lvl=DockerLogger.INFO)
