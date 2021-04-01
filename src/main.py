@@ -10,7 +10,7 @@ from utils.docker import DockerLogger
 
 logger = DockerLogger(prefix='BOT_RUNNER', lvl=DockerLogger.INFO)
 
-logger.log('Initializing bot...', lvl=DockerLogger.INFO)
+logger.log('Initializing bot', lvl=DockerLogger.INFO)
 
 Base = declarative_base()
 
@@ -36,6 +36,6 @@ if __name__ == '__main__':
     if not TOKEN:
         raise NameError("Missing env variable: BOT_TOKEN")
 
-    logger.log('Initialization Complete.', lvl=DockerLogger.INFO)
+    logger.log('Initialization Complete', lvl=DockerLogger.INFO)
 
     client.run(TOKEN)
