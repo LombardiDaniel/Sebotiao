@@ -16,4 +16,4 @@
 *.log
 
 # Send to testserver
-./cpypi.sh
+cpypi.sh
