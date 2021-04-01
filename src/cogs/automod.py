@@ -36,6 +36,13 @@ class AutoModerator(commands.Cog):
 
         await self.client.change_presence(activity=discord.Game(name='Truco com o Wanderley'))
 
+    @commands.command(name='ping', aliases=["ping server"])
+    async def ping(self, ctx):
+        '''
+        Pings the bot server.
+        '''
+        await ctx.channel.send(f"Latency: {round(self.client.latency * 1000)}ms")
+
     @commands.command(name='ajuda', aliases=['ajuda noix'])
     async def ajuda(self, ctx, our_input=None):
         '''

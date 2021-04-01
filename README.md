@@ -27,6 +27,7 @@
         -   [Variáveis de Ambiente](#variáveis-de-ambiente)
         -   [Chaves de Acesso](#chaves-de-acesso)
         -   [Logs](#logs)
+        -   [Comandos](#comandos)
 -   [License](#license)
 
 ### Sobre o Projeto
@@ -102,6 +103,21 @@ f"{lvl.upper()}; {str(datetime.now())[:-3]}; {msg};"
 ```
 
 Caso esteja debugando, pode-se chamar o método estático `stdout_log`, da mesma classe. Este aceita `*args` e `**kwargs`, para auxiliar.
+
+#### Comandos
+
+Eu optei por não usar o manuseador default de comandos do `discordpy`, então montei um parser que pode ser encontrado no arquivo [src/extras/messages.py](src/extras/messages.py). Mas de forma resumida, basta adicionar seu comando ao arquivo [src/extras/commands.yml](src/extras/commands.yml), mantendo a lógica do arquivo e tudo deve funcionar. (A lógica é:)
+
+```yaml
+nome_do_cog:
+    msg: "Descrição do cog"
+    commands:
+        nome_do_comando:
+            aliases: "aliases do comando"
+            msg: "Descrição do comando"
+            args: "Argumentos do comando" 
+```
+
 
 ### License
 

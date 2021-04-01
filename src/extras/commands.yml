@@ -6,6 +6,11 @@ automod:
             msg: "recursivo, quando um comando é passado como argumento, serão mostrado detalhes."
             args: "`COMANDO` (opcional)"
 
+        ping:
+            aliases: "ping server"
+            msg: "pinga o servidor do bot."
+            args: "Nenhum"
+
         development:
             aliases: "dev,development,git,info,status,-v,--version"
             msg: "fala informações sobre o desenvolvimento do bot"
