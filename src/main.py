@@ -8,7 +8,7 @@ from utils.utls import get_prefix
 from utils.docker import DockerLogger
 
 
-logger = DockerLogger(prefix='main', lvl=DockerLogger.INFO)
+logger = DockerLogger(prefix='BOT_RUNNER', lvl=DockerLogger.INFO)
 
 logger.log('Initializing bot...', lvl=DockerLogger.INFO)
 
@@ -38,6 +38,6 @@ if __name__ == '__main__':
     if not TOKEN:
         raise NameError("Missing env variable: BOT_TOKEN")
 
-    client.run(TOKEN)
-
     logger.log('Initialization Complete.', lvl=DockerLogger.INFO)
+
+    client.run(TOKEN)
