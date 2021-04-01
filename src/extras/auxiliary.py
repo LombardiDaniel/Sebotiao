@@ -48,6 +48,3 @@ class YoutubeHelper:
                 break
 
         return video_links
-
-
-ls = Youtuber.get_all_video_in_channel()
