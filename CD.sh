@@ -7,7 +7,7 @@ PULL="git pull origin"
 COMPOSE_PATH="/usr/local/bin/docker-compose"
 COMMAND="$COMPOSE_PATH down && $COMPOSE_PATH up --build -d"
 PRJ_PATH=$PWD
-LOG_FILE="CD.log"
+LOG_FILE="$PWD/CD.log"
 
 logthis() {
     STR=$1
