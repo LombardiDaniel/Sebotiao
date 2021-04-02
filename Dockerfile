@@ -13,14 +13,10 @@ RUN chmod a+rx /usr/local/bin/youtube-dl
 COPY ./requirements.txt /requirements.txt
 RUN pip3 install -r /requirements.txt
 
-# ffmpeg install
-RUN wget https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-armhf-static.tar.xz
-RUN tar -xf ffmpeg-git-armhf-static.tar.xz
-RUN mv ffmpeg-git-20210325-armhf-static/ffmpeg /usr/bin/ffmpeg
-
-# opus install
-RUN apt-get update
-RUN apt-get install libopus0
+# install opus and ffmpeg
+RUN apt update
+RUN apt install libopus0
+RUN apt install ffmpeg -y
 
 RUN mkdir /discord-bot
 COPY ./src/ discord-bot/src/
