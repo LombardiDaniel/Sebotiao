@@ -85,9 +85,11 @@ As variáveis de ambiente que o container da database precisa são:
 
 #### Chaves de Acesso
 
-As chaves de acesso para database e o token do bot do discord devem ser providenciados (gerados) por você.
+As chaves de acesso para database e o token do bot do discord devem ser providenciados (gerados) por você, assim como a chave da API do YouTube.
 
 Crie um bot [por aqui](https://discord.com/developers/applications/) e lembre-se de permitir acesso de administrador e habilitar [intents](https://discordpy.readthedocs.io/en/latest/intents.html).
+
+Para a API do YouTube, dê uma olhada na [documentação oficial](https://developers.google.com/youtube/v3).
 
 #### Logs
 
