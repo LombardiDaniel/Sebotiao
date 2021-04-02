@@ -65,7 +65,7 @@ class TiozaoZap(commands.Cog):
             )
 
         self.logger.log(
-            f'{ctx.guild.id} - {ctx.message.author.id} requested ZAP_AUDIO.',
+            f'{ctx.guild.id} - {ctx.message.author.id} requested ZAP_AUDIO',
             lvl=self.logger.INFO
         )
         await ctx.message.channel.send(f'Se liga nesse audio... {player.title}')
