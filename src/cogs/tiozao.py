@@ -1,13 +1,11 @@
-from random import choice
-from secrets import choice as s_choice
-import os
+from secrets import choice
 
 # import discord
 import discord
 from discord.ext import commands
 
 from extras import constants
-from utils.audio import YoutubeHelper, YTDLSource, ytdl
+from utils.audio import YoutubeHelper, YTDLSource
 from utils.docker import DockerLogger
 # from extras.messages import MessageFormater
 
@@ -56,7 +54,7 @@ class TiozaoZap(commands.Cog):
             await voice_channel.connect()
             voice_client = discord.utils.get(self.client.voice_clients, guild=ctx.guild)
 
-        video_url = s_choice(YoutubeHelper.get_urls_list())
+        video_url = choice(YoutubeHelper.get_urls_list())
         async with ctx.typing():
             player = await YTDLSource.from_url(video_url, loop=self.client.loop)
             voice_client.play(

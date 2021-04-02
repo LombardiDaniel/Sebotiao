@@ -1,5 +1,5 @@
 import re
-from random import choice
+from secrets import choice
 
 import discord
 from discord.ext import commands
