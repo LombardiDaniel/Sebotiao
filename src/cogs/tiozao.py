@@ -1,4 +1,4 @@
-from random import choice
+from secrets import choice
 import os
 
 # import discord
