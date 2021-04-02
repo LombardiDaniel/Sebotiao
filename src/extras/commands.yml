@@ -63,3 +63,11 @@ autorole:
             aliases: "update_react_role,add_react_role_combo,update_react_role_combo"
             msg: "Adiciona/Atualiza um cargo para react específico"
             args: "\"`TIPO_DE_REACT`;`NOME_DO_CARGO`\""
+
+tiaozao:
+    msg: "Coisas de tiozão do zap"
+    commands:
+        audio_do_zap:
+            aliases: "zap,audio,audio_zap"
+            msg: "Toca um audio do zap brabo pro pessoal ouvir"
+            args: "Nenhum"

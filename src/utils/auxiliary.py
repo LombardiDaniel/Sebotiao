@@ -1,6 +1,8 @@
 import urllib
 import json
 
+import discord
+
 import os
 
 
@@ -37,9 +39,9 @@ class YoutubeHelper:
             inp = urllib.urlopen(url)
             resp = json.load(inp)
 
-            for i in resp['items']:
-                if i['id']['kind'] == "youtube#video":
-                    video_links.append(base_video_url + i['id']['videoId'])
+            for item in resp['items']:
+                if item['id']['kind'] == "youtube#video":
+                    video_links.append(base_video_url + item['id']['videoId'])
 
             try:
                 next_page_token = resp['nextPageToken']
