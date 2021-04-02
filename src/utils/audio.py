@@ -59,7 +59,6 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
 class YoutubeHelper:
 
-
     @staticmethod
     def get_urls_list():
         '''
@@ -69,7 +68,7 @@ class YoutubeHelper:
         Args:
             - None.
         Returns:
-            -
+            - url_list (list of str): List of URLs.
         '''
 
         logger = DockerLogger(prefix='BufferYouTubeAPI', lvl=DockerLogger.INFO)
@@ -107,8 +106,8 @@ class YoutubeHelper:
 
                 return new_videos_lst
 
-            logger.log(lvl=logger.INFO, msg="Buffer Used")
-            return contents
+            logger.log(lvl=logger.INFO, msg="Using buffer")
+            return videos_lst
 
     @staticmethod
     def _get_channel_id(name):

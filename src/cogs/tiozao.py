@@ -1,4 +1,5 @@
-from secrets import choice
+from random import choice
+from secrets import choice as s_choice
 import os
 
 # import discord
@@ -55,7 +56,7 @@ class TiozaoZap(commands.Cog):
             await voice_channel.connect()
             voice_client = discord.utils.get(self.client.voice_clients, guild=ctx.guild)
 
-        video_url = choice(YoutubeHelper.get_urls_list())
+        video_url = s_choice(YoutubeHelper.get_urls_list())
         async with ctx.typing():
             player = await YTDLSource.from_url(video_url, loop=self.client.loop)
             voice_client.play(
