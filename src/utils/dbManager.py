@@ -51,6 +51,14 @@ class dbManager(ABC):
         else:
             # Raises an error if any of the needed env vars were not declared
             if any(not var for var in [db_user, db_pass, db_name, db_port]):
+                self.logger.log(
+                f"""Missing ENV VARS:
+                    POSTGRES_USER: '{db_user}',
+                    POSTGRES_PASSWORD: '{db_pass}',
+                    POSTGRES_DB: '{db_name}',
+                    DB_HOST: '{db_host}',
+                    POSTGRES_PORT: '{db_port}'
+                    """, lvl=self.logger.ERROR)
                 raise NameError(
                     f"""Missing ENV VARS:
                         POSTGRES_USER: '{db_user}',
@@ -66,6 +74,10 @@ class dbManager(ABC):
 
         Base.metadata.create_all(bind=self.engine)
         self.session = sessionmaker(bind=self.engine)
+
+
+# class dbStatic():
+#     def __init__()
 
 
 class dbAutoMod(dbManager):
