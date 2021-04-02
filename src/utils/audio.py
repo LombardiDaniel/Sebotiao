@@ -94,11 +94,13 @@ class YoutubeHelper:
             for key in contents.keys():
                 date_time_obj = datetime.strptime(key, '%Y/%m/%d')
 
+
+            videos_lst = [value for value in contents.values()]
+
             if (now - date_time_obj).days > 1:
                 logger.log(lvl=logger.INFO, msg="Buffer Expired, making API Call")
 
-                new_videos_lst = YoutubeHelper._make_api_call()
-                videos_lst = contents.values()[0]
+                videos_lst = YoutubeHelper._make_api_call()
                 new_videos_lst = set(videos_lst + new_videos_lst)
 
                 new_contents = {date_now:new_videos_lst}
@@ -106,7 +108,6 @@ class YoutubeHelper:
 
                 return new_videos_lst
 
-            videos_lst = contents.values()[0]
             logger.log(lvl=logger.INFO, msg="Using buffer")
             return videos_lst
 
