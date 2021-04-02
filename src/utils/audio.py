@@ -106,6 +106,7 @@ class YoutubeHelper:
 
                 return new_videos_lst
 
+            videos_lst = contents.values()[0]
             logger.log(lvl=logger.INFO, msg="Using buffer")
             return videos_lst
 
