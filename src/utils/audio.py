@@ -77,7 +77,7 @@ class YoutubeHelper:
         now = datetime.now()
         date_now = now.strftime("%Y/%m/%d/")
 
-        with open('/tmp/yt_list.yml', 'w+') as yaml_file:
+        with open('/tmp/yt_list.yml', 'r+') as yaml_file:
             contents = yaml.load(yaml_file, Loader=yaml.FullLoader)
 
             if contents is None:
