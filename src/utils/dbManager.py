@@ -8,7 +8,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from models import AdminOptions
-from run import Base
+from main import Base
 
 from utils.docker import DockerLogger
 

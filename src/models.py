@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Text
-from run import Base
+from main import Base
 
 
 class AdminOptions(Base):
