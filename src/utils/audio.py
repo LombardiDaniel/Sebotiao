@@ -75,7 +75,7 @@ class YoutubeHelper:
         logger = DockerLogger(prefix='BufferYouTubeAPI', lvl=DockerLogger.INFO)
 
         now = datetime.now()
-        date_now = now.strftime("%Y/%m/%d/")
+        date_now = now.strftime("%Y/%m/%d")
 
         if not os.path.isfile('/tmp/yt_list.yml'):
             os.mknod('/tmp/yt_list.yml')
