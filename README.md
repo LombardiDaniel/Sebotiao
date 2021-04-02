@@ -72,6 +72,7 @@ As variáveis de ambiente que o container bot precisa são:
 |     BOT_TOKEN    | Token do bot (disponibilizado pelo discord)                                                                                                                |         Sim        |
 |      DB_HOST     | IP (ou nome do container) da localidade da database                                                                                                        | Não (default=`db`) |
 |       DEBUG      | Se `1`, a database será SQLite no próprio diretório (único container docker); se `0`, é necessário um segundo container, contendo uma database PostgreSQL. |  Não (default=`0`) |
+|    YT_API_KEY    | Chave de API do Youtube (Para ter acesso à função `zap`)                                                                                                   |         Sim        |
 
 As variáveis de ambiente que o container da database precisa são:
 
@@ -115,9 +116,8 @@ nome_do_cog:
         nome_do_comando:
             aliases: "aliases do comando"
             msg: "Descrição do comando"
-            args: "Argumentos do comando" 
+            args: "Argumentos do comando"
 ```
-
 
 ### License
 
