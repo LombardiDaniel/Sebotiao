@@ -64,7 +64,7 @@ autorole:
             msg: "Adiciona/Atualiza um cargo para react específico"
             args: "\"`TIPO_DE_REACT`;`NOME_DO_CARGO`\""
 
-tiaozao:
+tiozao:
     msg: "Coisas de tiozão do zap"
     commands:
         audio_do_zap:
