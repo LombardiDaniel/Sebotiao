@@ -5,10 +5,8 @@ import os
 import discord
 from discord.ext import commands
 
-import youtube_dl
-
 from extras import constants
-from utils.auxiliary import YoutubeHelper
+from utils.audio import YoutubeHelper, YTDLSource, ytdl
 from utils.docker import DockerLogger
 # from extras.messages import MessageFormater
 
@@ -49,42 +47,27 @@ class TiozaoZap(commands.Cog):
             return
         await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
 
-        guild_id = ctx.guild.id
-        song_file_path = f"/tmp/songs/{guild_id}.mp3"
-        song_tmp = os.path.isfile(song_file_path)
-        try:
-            if song_tmp:
-                os.remove(song_file_path)
-        except PermissionError:
-            await ctx.send("Wait for the current playing music to end or use the 'stop' command")
-            return
-
         voice_channel = ctx.message.author.voice.channel
-        await voice_channel.connect()
-        voice = discord.utils.get(self.client.voice_clients, guild=ctx.guild)
 
-        ydl_opts = {
-            'format': 'bestaudio/best',
-            'outtmp': '/tmp/songs/%(id)s',
-            'postprocessors': [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '192',
-            }],
-        }
+        # Só tenta conectar se não está conectado, depois reseta
+        voice_client = discord.utils.get(self.client.voice_clients, guild=ctx.guild)
+        if not voice_client:
+            await voice_channel.connect()
+            voice_client = discord.utils.get(self.client.voice_clients, guild=ctx.guild)
 
-        # song_url = choice(YoutubeHelper.get_all_video_in_channel())
-        song_url, song_id = 'https://www.youtube.com/watch?v=fvhbx0bTtrA', 'fvhbx0bTtrA'
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([song_url])
-        for file in os.listdir("/tmp/songs/"):
-            if file.name == f'{song_id}.mp3':
-                os.rename(file, song_file_path)
-        voice.play(discord.FFmpegPCMAudio(song_file_path))
+        video_url = choice(YoutubeHelper.get_urls_list())
+        async with ctx.typing():
+            player = await YTDLSource.from_url(video_url, loop=self.client.loop)
+            voice_client.play(
+                player,
+                after=lambda e: print('Player error: %s' % e) if e else None
+            )
 
         self.logger.log(
-            f'{ctx.guild.id} - {ctx.message.author.name} requested ZAP_AUDIO.')
-        await ctx.message.channel.send('Se liga nesse audio...')
+            f'{ctx.guild.id} - {ctx.message.author.id} requested ZAP_AUDIO.',
+            lvl=self.logger.INFO
+        )
+        await ctx.message.channel.send(f'Se liga nesse audio... {player.title}')
 
 
 def setup(client):

@@ -19,9 +19,8 @@ RUN tar -xf ffmpeg-git-armhf-static.tar.xz
 RUN mv ffmpeg-git-20210325-armhf-static/ffmpeg /usr/bin/ffmpeg
 
 # opus install
-RUN wget https://github.com/xrisk/heroku-opus/archive/refs/heads/master.tar.gz
-RUN tar -xf master.tar.gz
-RUN ./heroku-opus-master/bin/compile
+RUN apt-get update
+RUN apt-get install libopus0
 
 RUN mkdir /discord-bot
 COPY ./src/ discord-bot/src/
