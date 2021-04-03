@@ -1,14 +1,16 @@
 #!/bin/bash
 
+SCRIPT=$(readlink -f $0)
+PRJ_PATH=`dirname $SCRIPT`
 
-PRJ_PATH=$PWD
+cd $PRJ_PATH
 
 IMAGE="lombardi/sebotiao"
 FETCH="git fetch"
 PULL="git pull origin"
 COMPOSE_PATH="/usr/local/bin/docker-compose"
 COMMAND="$COMPOSE_PATH down && $COMPOSE_PATH up --build -d"
-LOG_FILE="$PWD/CD.log"
+LOG_FILE="$PRJ_PATH/CD.log"
 
 logthis() {
     STR=$1
