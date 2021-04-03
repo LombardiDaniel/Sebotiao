@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 IMAGE="lombardi/sebotiao"
 FETCH="git fetch"
 PULL="git pull origin"
