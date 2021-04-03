@@ -14,15 +14,15 @@ LOG_FILE="$PRJ_PATH/CD.log"
 
 logthis() {
     STR=$1
-    echo "`date '+%d/%m/%Y %H:%M:%S'` - $STR" >> "$LOG_FILE"
+    echo "`date '+%d/%m/%Y %H:%M:%S'`; $STR;" >> "$LOG_FILE"
 }
 
 latest=$(git pull origin)
 
 if [[ $latest == "Already up to date." ]]; then
-        logthis "Already up to date. Nothing to do."
+        logthis "Already up to date. Nothing to do;"
 else
-        logthis "Update available. Executing update command..."
+        logthis "Update available. Executing update command;"
         eval $COMMAND
-        logthis "Update completed."
+        logthis "Update completed;"
 fi
