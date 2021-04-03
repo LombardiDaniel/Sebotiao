@@ -1,19 +1,19 @@
 #!/bin/bash
 
+
+PRJ_PATH=$PWD
+
 IMAGE="lombardi/sebotiao"
 FETCH="git fetch"
 PULL="git pull origin"
 COMPOSE_PATH="/usr/local/bin/docker-compose"
 COMMAND="$COMPOSE_PATH down && $COMPOSE_PATH up --build -d"
-PRJ_PATH=$PWD
 LOG_FILE="$PWD/CD.log"
 
 logthis() {
     STR=$1
     echo "`date '+%d/%m/%Y %H:%M:%S'` - $STR" >> "$LOG_FILE"
 }
-
-cd $PRJ_PATH
 
 latest=$(git pull origin)
 
