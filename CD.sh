@@ -10,7 +10,7 @@ FETCH="git fetch"
 PULL="git pull origin"
 COMPOSE_PATH="/usr/local/bin/docker-compose"
 COMMAND="$COMPOSE_PATH down && $COMPOSE_PATH up --build -d"
-LOG_FILE="$PRJ_PATH/CD.log"
+LOG_FILE="$PRJ_PATH/logs/CD.log"
 
 logthis() {
     STR=$1
