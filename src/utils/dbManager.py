@@ -509,6 +509,7 @@ class dbBotConfig(dbManager):
                 self.logger.log("Addin a new BotConfig entry from update_yt_yaml",
                     lvl=self.logger.WARNING)
                 conf_new = BotConfigs()
+                conf_new.id = 0
                 conf_new.yaml_yt_list = json.dumps(yaml_lst)
                 session.add(conf_new)
                 session.commit()
