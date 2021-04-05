@@ -9,7 +9,7 @@ IMAGE="lombardi/sebotiao"
 FETCH="git fetch"
 PULL="git pull origin"
 COMPOSE_PATH="/usr/local/bin/docker-compose"
-COMMAND="$COMPOSE_PATH down && $COMPOSE_PATH up --build -d"
+COMMAND="docker build . && $COMPOSE_PATH down && $COMPOSE_PATH up --build -d"
 LOG_FILE="$PRJ_PATH/logs/CD.log"
 
 logthis() {
