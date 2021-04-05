@@ -8,6 +8,7 @@ import discord
 import youtube_dl
 
 from utils.docker import DockerLogger
+from utils.dbManager import dbBotConfig
 
 import os
 
@@ -63,8 +64,9 @@ class YoutubeHelper:
     def get_urls_list():
         '''
         Controls the buffer to reduce number of youtubeAPI calls (max 1 per day).
-        Uses file /tmp/yt_list.yml to save content of day, if day expires, makes
-        api call to update list
+        Uses the database to save content of day, if day expires, makes api call
+        to update list.
+
         Args:
             - None.
         Returns:
@@ -74,41 +76,38 @@ class YoutubeHelper:
         logger = DockerLogger(prefix='BufferYouTubeAPI', lvl=DockerLogger.INFO)
 
         now = datetime.now()
-        date_now = now.strftime("%Y/%m/%d")
+        date_now = now.strftime("%Y-%m-%d")
 
-        if not os.path.isfile('/tmp/yt_list.yml'):
-            os.mknod('/tmp/yt_list.yml')
+        bot_confs = dbBotConfig()
+        contents = bot_confs.yt_yaml
 
-        with open('/tmp/yt_list.yml', 'r+') as yaml_file:
-            contents = yaml.load(yaml_file, Loader=yaml.FullLoader)
+        if contents is None:
+            logger.log(lvl=logger.INFO, msg="Content of buffer is None, making API Call")
+            videos_lst = YoutubeHelper._make_api_call()
+            contents = {date_now:videos_lst}
+            bot_confs.update_yt_yaml(contents)
+            return videos_lst
 
-            if contents is None:
-                logger.log(lvl=logger.INFO, msg="Content of buffer is None, making API Call")
-                videos_lst = YoutubeHelper._make_api_call()
-                contents = {date_now:videos_lst}
-                yaml.dump(contents, yaml_file, default_flow_style=False)
-                return videos_lst
+        date_time_obj = None
+        # Only has 1 key, but we use for anyway
+        for key in contents.keys():
+            date_time_obj = datetime.strptime(key, '%Y-%m-%d')
 
-            date_time_obj = None
-            # Only has 1 key, but we use for anyway
-            for key in contents.keys():
-                date_time_obj = datetime.strptime(key, '%Y/%m/%d')
+        videos_lst = [value for value in contents.values()]
 
-            videos_lst = [value for value in contents.values()]
+        if (now - date_time_obj).days > 1:
+            logger.log(lvl=logger.INFO, msg="Buffer Expired, making API Call")
 
-            if (now - date_time_obj).days > 1:
-                logger.log(lvl=logger.INFO, msg="Buffer Expired, making API Call")
+            new_videos_lst = YoutubeHelper._make_api_call()
+            new_videos_lst = set(videos_lst + new_videos_lst)
 
-                new_videos_lst = YoutubeHelper._make_api_call()
-                new_videos_lst = set(videos_lst.extend(new_videos_lst))
+            new_contents = {date_now:new_videos_lst}
+            bot_confs.update_yt_yaml(new_contents)
 
-                new_contents = {date_now:new_videos_lst}
-                yaml.dump(new_contents, yaml_file, default_flow_style=False)
+            return new_videos_lst
 
-                return new_videos_lst
-
-            logger.log(lvl=logger.INFO, msg="Using buffer")
-            return videos_lst[0]
+        logger.log(lvl=logger.INFO, msg="Using buffer")
+        return videos_lst[0]
 
     @staticmethod
     def _get_channel_id(name):

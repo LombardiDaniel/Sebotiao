@@ -29,6 +29,29 @@ class AdminOptions(Base):
     cursed_words = Column('cursed_words', String(500), nullable=True)
 
 
+class BotConfigs(Base):
+    '''
+    Bot Configs.
+
+    Rows:
+        - yaml_yt_list (text): String containing parsed yaml dictionary
+            {"%Y-%m-%d": ["url1", "url2", ...]}
+
+    '''
+
+    __tablename__ = "bot_configs"
+
+    id = Column('id', Integer, primary_key=True)
+
+    yaml_yt_list = Column('yaml_yt_list', Text, nullable=True)
+
+    # Migration:
+    # CREATE TABLE bot_configs (
+    #       id INTEGER NOT NULL,
+    #       yaml_yt_list TEXT,
+    #       PRIMARY KEY (id)
+    # )
+
 # class Streamer(Base):
 #     '''
 #     Streamer Model for storage of notifications settings.

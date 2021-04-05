@@ -1,4 +1,5 @@
 import os
+import logging
 
 import json
 
@@ -7,7 +8,7 @@ from abc import ABC#, abstractmethod
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from models import AdminOptions
+from models import AdminOptions, BotConfigs
 from main import Base
 
 from utils.docker import DockerLogger
@@ -32,6 +33,8 @@ class dbManager(ABC):
 
     def __init__(self, guild_id):
         self.logger = DockerLogger(prefix='dbManager', lvl=DockerLogger.INFO)
+        self.log_handler = logging.FileHandler('./logs/sqlalchemy.log', mode='a+')
+        self.log_handler.setLevel(logging.INFO)
 
         self.guild_id = str(guild_id)
         db_user = os.environ.get('POSTGRES_USER')
@@ -45,7 +48,7 @@ class dbManager(ABC):
 
         # If debug mode, creates local sqlite database
         if int(os.environ.get('DEBUG')):
-            self.engine = create_engine('sqlite:////devdb/sqlite.db', echo=False)
+            self.engine = create_engine('sqlite:////devdb/sqlite.db', echo=True)
             self.logger.log("Connected to SQLITE DB (Do NOT use in production)",
                 lvl=self.logger.WARNING)
         else:
@@ -72,6 +75,7 @@ class dbManager(ABC):
                 f'postgresql+psycopg2://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}',
                 echo=False)
 
+        logging.getLogger('sqlalchemy').addHandler(self.log_handler)
         Base.metadata.create_all(bind=self.engine)
         self.session = sessionmaker(bind=self.engine)
 
@@ -203,8 +207,6 @@ class dbAutoMod(dbManager):
             return ["nenhuma palavra banida"]
 
         return admin_options[-1].cursed_words.split(',')
-
-
 
 
 class dbAutoRole(dbManager):
@@ -522,3 +524,66 @@ class dbAutoRole(dbManager):
         self.logger.log("connection closed", lvl=self.logger.INFO)
 
         return int(admin_options[-1].ract_role_message_id)
+
+
+class dbBotConfig(dbManager):
+    '''
+    Bot Configs, such as yt_yaml_lst.
+    '''
+
+    def __init__(self):
+        '''
+        Guild id passed as -1 to ignore error message from not having a guild.
+        '''
+        super().__init__(guild_id=-1)
+
+
+    def update_yt_yaml(self, yaml_lst):
+        '''
+        Replaces the existing yt_yaml row in the database.
+
+        Args:
+            - yaml_lst (str): parsed yaml in the form:
+                {'%Y-%m-%d': ['url1', 'url2', ...]}
+        '''
+
+        session = self.session()
+        self.logger.log("created connection to db", lvl=self.logger.INFO)
+
+        conf_query = session.query(BotConfigs).order_by('id')
+
+        # if there are already entries for this guild, updates them
+        if conf_query.count():
+            if conf_query[-1].yaml_yt_list:
+                conf_query[-1].yaml_yt_list = json.dumps(yaml_lst)
+                session.commit()
+
+        # if there are no entries for this guild, creates entry
+        else:
+            conf_new = BotConfigs()
+            conf_new.yaml_yt_list = json.dumps(yaml_lst)
+            session.add(conf_new)
+            session.commit()
+
+        session.close()
+        self.logger.log("connection closed", lvl=self.logger.INFO)
+
+    @property
+    def yt_yaml(self):
+        '''
+        Gets the yaml format from memory.
+        Returns:
+            - yt_yaml (str): parsed json dictionary.
+        '''
+
+        session = self.session()
+        self.logger.log("created connection to db", lvl=self.logger.INFO)
+
+        conf_query = session.query(BotConfigs).order_by('id')
+        session.close()
+        self.logger.log("connection closed", lvl=self.logger.INFO)
+
+        if conf_query.count():
+            return json.loads(conf_query[-1].yaml_yt_list)
+
+        return None
