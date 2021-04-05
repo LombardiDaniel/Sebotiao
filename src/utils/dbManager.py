@@ -48,7 +48,7 @@ class dbManager(ABC):
 
         # If debug mode, creates local sqlite database
         if int(os.environ.get('DEBUG')):
-            self.engine = create_engine('sqlite:////devdb/sqlite.db', echo=True)
+            self.engine = create_engine('sqlite:////devdb/sqlite.db?check_same_thread=False', echo=True)
             self.logger.log("Connected to SQLITE DB (Do NOT use in production)",
                 lvl=self.logger.WARNING)
         else:
@@ -73,7 +73,7 @@ class dbManager(ABC):
 
             self.engine = create_engine(
                 f'postgresql+psycopg2://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}',
-                echo=False)
+                echo=True)
 
         logging.getLogger('sqlalchemy').addHandler(self.log_handler)
         Base.metadata.create_all(bind=self.engine)
@@ -550,15 +550,16 @@ class dbBotConfig(dbManager):
         session = self.session()
         self.logger.log("created connection to db", lvl=self.logger.INFO)
 
-        conf_query = session.query(BotConfigs).order_by('id')
+        conf_query = session.query(BotConfigs).filer(
+            BotConfigs.id == 0)
 
-        # if there are already entries for this guild, updates them
+        # if there are already entries, updates them
         if conf_query.count():
             if conf_query[-1].yaml_yt_list:
                 conf_query[-1].yaml_yt_list = json.dumps(yaml_lst)
                 session.commit()
 
-        # if there are no entries for this guild, creates entry
+        # if there are no entries, creates one
         else:
             conf_new = BotConfigs()
             conf_new.yaml_yt_list = json.dumps(yaml_lst)
