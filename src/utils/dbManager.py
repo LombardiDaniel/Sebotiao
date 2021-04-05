@@ -495,7 +495,7 @@ class dbBotConfig(dbManager):
         '''
 
         with self.session() as session:
-            conf_query = session.query(BotConfigs).filer(
+            conf_query = session.query(BotConfigs).filter(
                 BotConfigs.id == 0)
 
             # if there are already entries, updates them
