@@ -1,8 +1,7 @@
 '''
-
 Creates the formated messages to be sent on to the discord.
-
 '''
+
 from datetime import datetime
 
 import requests

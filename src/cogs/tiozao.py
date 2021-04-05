@@ -1,13 +1,11 @@
 from secrets import choice
 
-# import discord
 import discord
 from discord.ext import commands
 
 from extras import constants
 from utils.audio import YoutubeHelper, YTDLSource
 from utils.docker import DockerLogger
-# from extras.messages import MessageFormater
 
 
 class TiozaoZap(commands.Cog):

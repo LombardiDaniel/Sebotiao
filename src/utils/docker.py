@@ -35,7 +35,7 @@ class DockerLogger:
         if lvl >= self.lvl:
 
             if self.path is not None:
-                with open(self.path, 'a') as log_file:
+                with open(self.path, 'a+') as log_file:
                     log_file.write(f'{self._lvl_str(lvl)}; {str(datetime.now())[:-3]}; {msg};\n')
 
             DockerLogger.stdout_log(msg, lvl=self._lvl_str(lvl), prefix=self.prefix)

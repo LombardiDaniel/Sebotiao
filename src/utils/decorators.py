@@ -1,7 +1,3 @@
-from random import choice
-
-from extras import constants
-
 
 def admin_only(command_func):
     '''

@@ -3,15 +3,15 @@ import logging
 
 import json
 
-from abc import ABC#, abstractmethod
+from abc import ABC
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from models import AdminOptions, BotConfigs
-from main import Base
+from src.models import AdminOptions, BotConfigs
+from src.main import Base
 
-from utils.docker import DockerLogger
+from src.utils.docker import DockerLogger
 
 
 class dbManager(ABC):

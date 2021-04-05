@@ -1,7 +1,7 @@
+import os
 import asyncio
-import urllib
 import requests
-import yaml
+
 from datetime import datetime
 
 import discord
@@ -9,8 +9,6 @@ import youtube_dl
 
 from utils.docker import DockerLogger
 from utils.dbManager import dbBotConfig
-
-import os
 
 # Suppress noise about console usage from errors
 youtube_dl.utils.bug_reports_message = lambda: ''
