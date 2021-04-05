@@ -37,6 +37,7 @@ class dbManager(ABC):
         self.log_handler.setLevel(logging.INFO)
 
         self.guild_id = str(guild_id)
+
         db_user = os.environ.get('POSTGRES_USER')
         db_pass = os.environ.get('POSTGRES_PASSWORD')
 
@@ -48,7 +49,10 @@ class dbManager(ABC):
 
         # If debug mode, creates local sqlite database
         if int(os.environ.get('DEBUG')):
-            self.engine = create_engine('sqlite:////devdb/sqlite.db?check_same_thread=False', echo=True)
+            self.engine = create_engine(
+                'sqlite:////devdb/sqlite.db?check_same_thread=False',
+                echo=True
+            )
             self.logger.log("Connected to SQLITE DB (Do NOT use in production)",
                 lvl=self.logger.WARNING)
         else:
@@ -73,7 +77,10 @@ class dbManager(ABC):
 
             self.engine = create_engine(
                 f'postgresql+psycopg2://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}',
-                echo=True)
+                echo=True
+            )
+            self.logger.log("Connected to PostgreSQL",
+                lvl=self.logger.INFO)
 
         logging.getLogger('sqlalchemy').addHandler(self.log_handler)
         Base.metadata.create_all(bind=self.engine)
@@ -112,36 +119,32 @@ class dbAutoMod(dbManager):
             None.
 
         '''
-        session = self.session()
-        self.logger.log("created connection to db", lvl=self.logger.INFO)
 
-        guild_query = session.query(AdminOptions).filter(
-            AdminOptions.guild_id == self.guild_id)
+        with self.session() as session:
+            guild_query = session.query(AdminOptions).filter(
+                AdminOptions.guild_id == self.guild_id)
 
-        # if there are already entries for this guild, updates them
-        if guild_query.count():
-            if guild_query[-1].cursed_words:
+            # if there are already entries for this guild, updates them
+            if guild_query.count():
+                if guild_query[-1].cursed_words:
 
-                new_words = set(words + guild_query[-1].cursed_words.split(','))
+                    new_words = set(words + guild_query[-1].cursed_words.split(','))
 
-                guild_query[-1].\
-                    cursed_words = ','.join(new_words)
+                    guild_query[-1].\
+                        cursed_words = ','.join(new_words)
 
-                session.commit()
+                    session.commit()
+                else:
+                    guild_query[-1].cursed_words = ','.join(set(words))
+                    session.commit()
+
+            # if there are no entries for this guild, creates entry
             else:
-                guild_query[-1].cursed_words = ','.join(set(words))
+                admin_options = AdminOptions()
+                admin_options.guild_id = self.guild_id
+                admin_options.cursed_words = ','.join(set(words))
+                session.add(admin_options)
                 session.commit()
-
-        # if there are no entries for this guild, creates entry
-        else:
-            admin_options = AdminOptions()
-            admin_options.guild_id = self.guild_id
-            admin_options.cursed_words = ','.join(set(words))
-            session.add(admin_options)
-            session.commit()
-
-        session.close()
-        self.logger.log("connection closed", lvl=self.logger.INFO)
 
     def remove_cursed_words(self, words):
         '''
@@ -154,30 +157,26 @@ class dbAutoMod(dbManager):
             None.
 
         '''
-        session = self.session()
-        self.logger.log("created connection to db", lvl=self.logger.INFO)
 
-        guild_query = session.query(AdminOptions).filter(
-            AdminOptions.guild_id == self.guild_id)
+        with self.session() as session:
+            guild_query = session.query(AdminOptions).filter(
+                AdminOptions.guild_id == self.guild_id)
 
-        # if there are already entries for this guild, updates them
-        if guild_query.count():
-            if guild_query[-1].cursed_words:
+            # if there are already entries for this guild, updates them
+            if guild_query.count():
+                if guild_query[-1].cursed_words:
 
-                # Removes words
-                curr_words = guild_query[-1].cursed_words.split(',')
-                for word in words:
-                    if word in curr_words:
-                        curr_words.remove(word)
-                        break
+                    # Removes words
+                    curr_words = guild_query[-1].cursed_words.split(',')
+                    for word in words:
+                        if word in curr_words:
+                            curr_words.remove(word)
+                            break
 
-                # Updates table
-                guild_query[-1].\
-                    cursed_words = ','.join(set(curr_words))
-                session.commit()
-
-        session.close()
-        self.logger.log("connection closed", lvl=self.logger.INFO)
+                    # Updates table
+                    guild_query[-1].\
+                        cursed_words = ','.join(set(curr_words))
+                    session.commit()
 
     @property
     def cursed_words(self):
@@ -192,21 +191,16 @@ class dbAutoMod(dbManager):
 
         '''
 
-        session = self.session()
-        self.logger.log("created connection to db", lvl=self.logger.INFO)
+        with self.session() as session:
+            admin_options = session.query(AdminOptions).filter(
+                AdminOptions.guild_id == self.guild_id)
 
-        admin_options = session.query(AdminOptions).filter(
-            AdminOptions.guild_id == self.guild_id)
+            if not admin_options.count():
+                return ["sem configuração"]
+            if not admin_options[-1].cursed_words:
+                return ["nenhuma palavra banida"]
 
-        session.close()
-        self.logger.log("connection closed", lvl=self.logger.INFO)
-
-        if not admin_options.count():
-            return ["sem configuração"]
-        if not admin_options[-1].cursed_words:
-            return ["nenhuma palavra banida"]
-
-        return admin_options[-1].cursed_words.split(',')
+            return admin_options[-1].cursed_words.split(',')
 
 
 class dbAutoRole(dbManager):
@@ -247,28 +241,23 @@ class dbAutoRole(dbManager):
 
         default_role_id = str(default_role_id)
 
-        session = self.session()
-        self.logger.log("created connection to db", lvl=self.logger.INFO)
+        with self.session() as session:
+            guild_query = session.query(AdminOptions).filter(
+                AdminOptions.guild_id == self.guild_id)
 
-        guild_query = session.query(AdminOptions).filter(
-            AdminOptions.guild_id == self.guild_id)
+            # if there are already entries for this guild, updates them
+            if guild_query.count():
+                if guild_query[-1].default_role_id:
+                    guild_query[-1].default_role_id = default_role_id
+                    session.commit()
 
-        # if there are already entries for this guild, updates them
-        if guild_query.count():
-            if guild_query[-1].default_role_id:
-                guild_query[-1].default_role_id = default_role_id
+            # if there are no entries for this guild, creates entry
+            else:
+                admin_options = AdminOptions()
+                admin_options.guild_id = self.guild_id
+                admin_options.default_role_id = default_role_id
+                session.add(admin_options)
                 session.commit()
-
-        # if there are no entries for this guild, creates entry
-        else:
-            admin_options = AdminOptions()
-            admin_options.guild_id = self.guild_id
-            admin_options.default_role_id = default_role_id
-            session.add(admin_options)
-            session.commit()
-
-        session.close()
-        self.logger.log("connection closed", lvl=self.logger.INFO)
 
     def set_welcome_channel(self, home_msg_id):
         '''
@@ -284,27 +273,22 @@ class dbAutoRole(dbManager):
 
         home_msg_id = str(home_msg_id)
 
-        session = self.session()
-        self.logger.log("created connection to db", lvl=self.logger.INFO)
+        with self.session() as session:
+            guild_query = session.query(AdminOptions).filter(
+                AdminOptions.guild_id == self.guild_id)
 
-        guild_query = session.query(AdminOptions).filter(
-            AdminOptions.guild_id == self.guild_id)
+            # if there are already entries for this guild, updates them
+            if guild_query.count():
+                guild_query[-1].home_msg_id = home_msg_id
+                session.commit()
 
-        # if there are already entries for this guild, updates them
-        if guild_query.count():
-            guild_query[-1].home_msg_id = str(home_msg_id)
-            session.commit()
-
-        # if there are no entries for this guild, creates entry
-        else:
-            admin_options = AdminOptions()
-            admin_options.guild_id = self.guild_id
-            admin_options.home_msg_id = str(home_msg_id)
-            session.add(admin_options)
-            session.commit()
-
-        session.close()
-        self.logger.log("connection closed", lvl=self.logger.INFO)
+            # if there are no entries for this guild, creates entry
+            else:
+                admin_options = AdminOptions()
+                admin_options.guild_id = self.guild_id
+                admin_options.home_msg_id = home_msg_id
+                session.add(admin_options)
+                session.commit()
 
     def remove_welcome_channel(self):
         '''
@@ -318,28 +302,23 @@ class dbAutoRole(dbManager):
 
         '''
 
-        session = self.session()
-        self.logger.log("created connection to db", lvl=self.logger.INFO)
+        with self.session() as session:
+            guild_query = session.query(AdminOptions).filter(
+                AdminOptions.guild_id == self.guild_id)
 
-        guild_query = session.query(AdminOptions).filter(
-            AdminOptions.guild_id == self.guild_id)
+            # if there are already entries for this guild, updates them
+            if guild_query.count():
+                if guild_query[-1].home_msg_id:
+                    guild_query[-1].home_msg_id = "0"
+                    session.commit()
 
-        # if there are already entries for this guild, updates them
-        if guild_query.count():
-            if guild_query[-1].home_msg_id:
-                guild_query[-1].home_msg_id = "0"
+            # if there are no entries for this guild, creates entry
+            else:
+                admin_options = AdminOptions()
+                admin_options.guild_id = self.guild_id
+                admin_options.home_msg_id = "0"
+                session.add(admin_options)
                 session.commit()
-
-        # if there are no entries for this guild, creates entry
-        else:
-            admin_options = AdminOptions()
-            admin_options.guild_id = self.guild_id
-            admin_options.home_msg_id = "0"
-            session.add(admin_options)
-            session.commit()
-
-        session.close()
-        self.logger.log("connection closed", lvl=self.logger.INFO)
 
     def set_react_role_message(self, message_id):
         '''
@@ -350,28 +329,22 @@ class dbAutoRole(dbManager):
             None.
         '''
 
-        session = self.session()
-        self.logger.log("created connection to db", lvl=self.logger.INFO)
+        with self.session() as session:
+            guild_query = session.query(AdminOptions).filter(
+                AdminOptions.guild_id == self.guild_id)
 
-        guild_query = session.query(AdminOptions).filter(
-            AdminOptions.guild_id == self.guild_id)
+            # if there are already entries for this guild, updates them
+            if guild_query.count():
+                guild_query[-1].ract_role_message_id = str(message_id)
+                session.commit()
 
-        # if there are already entries for this guild, updates them
-        if guild_query.count():
-            guild_query[-1].ract_role_message_id = str(message_id)
-            session.commit()
-
-        # if there are no entries for this guild, creates entry
-        else:
-            admin_options = AdminOptions()
-            admin_options.guild_id = self.guild_id
-            admin_options.ract_role_message_id = str(message_id)
-            session.add(admin_options)
-            session.commit()
-
-        session.close()
-        self.logger.log("connection closed", lvl=self.logger.INFO)
-
+            # if there are no entries for this guild, creates entry
+            else:
+                admin_options = AdminOptions()
+                admin_options.guild_id = self.guild_id
+                admin_options.ract_role_message_id = str(message_id)
+                session.add(admin_options)
+                session.commit()
 
     def add_react_role(self, react_role_dict):
         '''
@@ -388,35 +361,30 @@ class dbAutoRole(dbManager):
 
         '''
 
-        session = self.session()
-        self.logger.log("created connection to db", lvl=self.logger.INFO)
+        with self.session() as session:
+            guild_query = session.query(AdminOptions).filter(
+                AdminOptions.guild_id == self.guild_id)
 
-        guild_query = session.query(AdminOptions).filter(
-            AdminOptions.guild_id == self.guild_id)
+            # if there are already entries for this guild, updates them
+            if guild_query.count():
+                if guild_query[-1].react_role_dict:
 
-        # if there are already entries for this guild, updates them
-        if guild_query.count():
-            if guild_query[-1].react_role_dict:
+                    curr_dict = json.loads(guild_query[-1].react_role_dict)
+                    curr_dict.update(react_role_dict)
 
-                curr_dict = json.loads(guild_query[-1].react_role_dict)
-                curr_dict.update(react_role_dict)
+                    guild_query[-1].react_role_dict = json.dumps(curr_dict)
+                    session.commit()
+                else:
+                    guild_query[-1].react_role_dict = json.dumps(react_role_dict)
+                    session.commit()
 
-                guild_query[-1].react_role_dict = json.dumps(curr_dict)
-                session.commit()
+            # if there are no entries for this guild, creates entry
             else:
-                guild_query[-1].react_role_dict = json.dumps(react_role_dict)
+                admin_options = AdminOptions()
+                admin_options.guild_id = self.guild_id
+                admin_options.react_role_dict = json.dumps(react_role_dict)
+                session.add(admin_options)
                 session.commit()
-
-        # if there are no entries for this guild, creates entry
-        else:
-            admin_options = AdminOptions()
-            admin_options.guild_id = self.guild_id
-            admin_options.react_role_dict = json.dumps(react_role_dict)
-            session.add(admin_options)
-            session.commit()
-
-        session.close()
-        self.logger.log("connection closed", lvl=self.logger.INFO)
 
     @property
     def default_role_id(self):
@@ -431,21 +399,16 @@ class dbAutoRole(dbManager):
 
         '''
 
-        session = self.session()
-        self.logger.log("created connection to db", lvl=self.logger.INFO)
+        with self.session() as session:
+            admin_options = session.query(AdminOptions).filter(
+                AdminOptions.guild_id == self.guild_id)
 
-        admin_options = session.query(AdminOptions).filter(
-            AdminOptions.guild_id == self.guild_id)
+            if not admin_options.count():
+                return None
+            if not admin_options[-1].default_role_id:
+                return None
 
-        session.close()
-        self.logger.log("connection closed", lvl=self.logger.INFO)
-
-        if not admin_options.count():
-            return None
-        if not admin_options[-1].default_role_id:
-            return None
-
-        return int(admin_options[-1].default_role_id)
+            return int(admin_options[-1].default_role_id)
 
     @property
     def home_msg_id(self):
@@ -460,19 +423,14 @@ class dbAutoRole(dbManager):
 
         '''
 
-        session = self.session()
-        self.logger.log("created connection to db", lvl=self.logger.INFO)
+        with self.session() as session:
+            admin_options = session.query(AdminOptions).filter(
+                AdminOptions.guild_id == self.guild_id)
 
-        admin_options = session.query(AdminOptions).filter(
-            AdminOptions.guild_id == self.guild_id)
+            if not admin_options.count() or admin_options[-1].home_msg_id is None:
+                return 0
 
-        session.close()
-        self.logger.log("connection closed", lvl=self.logger.INFO)
-
-        if not admin_options.count() or admin_options[-1].home_msg_id is None:
-            return 0
-
-        return int(admin_options[-1].home_msg_id)
+            return int(admin_options[-1].home_msg_id)
 
     @property
     def react_role_dict(self):
@@ -488,18 +446,12 @@ class dbAutoRole(dbManager):
 
         '''
 
-        session = self.session()
-        self.logger.log("created connection to db", lvl=self.logger.INFO)
+        with self.session() as session:
+            admin_options = session.query(AdminOptions).filter(
+                AdminOptions.guild_id == self.guild_id)
 
-        admin_options = session.query(AdminOptions).filter(
-            AdminOptions.guild_id == self.guild_id)
+            return json.loads(admin_options[-1].react_role_dict)
 
-        session.close()
-        self.logger.log("connection closed", lvl=self.logger.INFO)
-
-        react_role_dict = json.loads(admin_options[-1].react_role_dict)
-
-        return react_role_dict
 
     @property
     def react_role_msg_id(self):
@@ -514,16 +466,11 @@ class dbAutoRole(dbManager):
 
         '''
 
-        session = self.session()
-        self.logger.log("created connection to db", lvl=self.logger.INFO)
+        with self.session() as session:
+            admin_options = session.query(AdminOptions).filter(
+                AdminOptions.guild_id == self.guild_id)
 
-        admin_options = session.query(AdminOptions).filter(
-            AdminOptions.guild_id == self.guild_id)
-
-        session.close()
-        self.logger.log("connection closed", lvl=self.logger.INFO)
-
-        return int(admin_options[-1].ract_role_message_id)
+            return int(admin_options[-1].ract_role_message_id)
 
 
 class dbBotConfig(dbManager):
@@ -547,27 +494,24 @@ class dbBotConfig(dbManager):
                 {'%Y-%m-%d': ['url1', 'url2', ...]}
         '''
 
-        session = self.session()
-        self.logger.log("created connection to db", lvl=self.logger.INFO)
+        with self.session() as session:
+            conf_query = session.query(BotConfigs).filer(
+                BotConfigs.id == 0)
 
-        conf_query = session.query(BotConfigs).filer(
-            BotConfigs.id == 0)
-
-        # if there are already entries, updates them
-        if conf_query.count():
-            if conf_query[-1].yaml_yt_list:
+            # if there are already entries, updates them
+            if conf_query.count():
+                self.logger.log("Updating BotConfig update_yt_yaml", lvl=self.logger.INFO)
                 conf_query[-1].yaml_yt_list = json.dumps(yaml_lst)
                 session.commit()
 
-        # if there are no entries, creates one
-        else:
-            conf_new = BotConfigs()
-            conf_new.yaml_yt_list = json.dumps(yaml_lst)
-            session.add(conf_new)
-            session.commit()
-
-        session.close()
-        self.logger.log("connection closed", lvl=self.logger.INFO)
+            # if there are no entries, creates one
+            else:
+                self.logger.log("Addin a new BotConfig entry from update_yt_yaml",
+                    lvl=self.logger.WARNING)
+                conf_new = BotConfigs()
+                conf_new.yaml_yt_list = json.dumps(yaml_lst)
+                session.add(conf_new)
+                session.commit()
 
     @property
     def yt_yaml(self):
@@ -577,14 +521,10 @@ class dbBotConfig(dbManager):
             - yt_yaml (str): parsed json dictionary.
         '''
 
-        session = self.session()
-        self.logger.log("created connection to db", lvl=self.logger.INFO)
+        with self.session() as session:
+            conf_query = session.query(BotConfigs).order_by('id')
 
-        conf_query = session.query(BotConfigs).order_by('id')
-        session.close()
-        self.logger.log("connection closed", lvl=self.logger.INFO)
+            if conf_query.count():
+                return json.loads(conf_query[-1].yaml_yt_list)
 
-        if conf_query.count():
-            return json.loads(conf_query[-1].yaml_yt_list)
-
-        return None
+            return None
