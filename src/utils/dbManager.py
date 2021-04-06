@@ -8,10 +8,10 @@ from abc import ABC
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from src.models import AdminOptions, BotConfigs
-from src.main import Base
+from models import AdminOptions, BotConfigs
+from main import Base
 
-from src.utils.docker import DockerLogger
+from utils.docker import DockerLogger
 
 
 class dbManager(ABC):
