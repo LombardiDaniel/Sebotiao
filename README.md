@@ -58,6 +58,9 @@ Pessoalmente, recomendo que utilize docker. Nesse caso, utilize o [docker-compos
 -   [Python 3.7](https://www.python.org)
 -   [Virtual Env](https://pypi.org/project/virtualenv/)
 -   Bibliotecas estão em [requirements.txt](https://github.com/LombardiDaniel/Sebotiao/blob/master/requirements.txt)
+-   [Opuc Codec](https://opus-codec.org)
+-   [youtube-dl](https://youtube-dl.org)
+-   [ffmpeg](https://www.ffmpeg.org)
 
 ### Organização do Projeto
 

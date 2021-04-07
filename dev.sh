@@ -10,7 +10,7 @@ do
         ;;
         -h|--help)
         echo "-h, --help    the help command"
-        echo "-w, --wipe    wipes the development volume (recreates it)"
+        echo "-w, --wipe    wipes the development volume (resets development database)"
         exit 0
         ;;
     esac
