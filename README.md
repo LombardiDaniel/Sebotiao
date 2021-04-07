@@ -42,7 +42,7 @@ Feito com [discord.py](https://discordpy.readthedocs.io/en/latest/), [sqlalchemy
 
 ### Desenvolvendo
 
-Aqui você verá as ferramentas necessárias para o desenvolvimento do Sebotiao.
+Aqui você verá as ferramentas necessárias para o desenvolvimento do Sebotiao. De maneira mega resumida: rode o arquivo `./dev.sh` (use `-h`/`--help` para ver as opções), ele criará o container com o seu bot em modo de desenvolvimento.
 
 #### Pré-requisitos
 
@@ -64,11 +64,11 @@ Pessoalmente, recomendo que utilize docker. Nesse caso, utilize o [docker-compos
 
 ### Organização do Projeto
 
-De forma geral, o arquivo `src/main.py` roda o bot, utilizando os arquivos da pasta `cog` (leia mais sobre cogs [aqui](https://discordpy.readthedocs.io/en/latest/ext/commands/cogs.html)). As interações com a database são feitas pelo arquivo `src/utils/dbManager.py`, que simplifica o acesso utilizando a biblioteca sqlalchemy. Os modelos para criação das tabelas ficam no arquivo `src/models.py`.
+De forma geral, o arquivo `src/main.py` roda o bot, utilizando os arquivos da pasta [`cogs/`](cogs/) (leia mais sobre cogs [aqui](https://discordpy.readthedocs.io/en/latest/ext/commands/cogs.html)). As interações com a database são feitas pelo arquivo [`src/utils/dbManager.py`](src/utils/dbManager.py), que simplifica o acesso utilizando a biblioteca sqlalchemy. Os modelos para criação das tabelas ficam no arquivo [`src/models.py`](src/models.py).
 
 #### Variáveis de Ambiente
 
-As variáveis de ambiente que o container bot precisa são:
+As variáveis de ambiente que o container bot precisa são, dê uma olhada nos arquivos `docker-compose`, ou crie a pasta `env/` e coloque os arquivos `.env` na mesma:
 
 | Nome da Variável | Significado                                                                                                                                                |     Obrigatória    |
 | :--------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------: |
@@ -102,10 +102,10 @@ Os arquivos `.log` são separados de acordo com o `prefix` especificados na inic
 
 ```py
 # Nos arquivos .log
-f"{self.lvl_str}; {str(datetime.now())[:-3]}; {msg};\n"
+f"{lvl_str}; {str(datetime.now())[:-3]}; {msg};\n"
 
 # No stdout
-f"{lvl.upper()}; {str(datetime.now())[:-3]}; {msg};"
+f"{lvl_str}; {str(datetime.now())[:-3]}; {msg};"
 ```
 
 Caso esteja debugando, pode-se chamar o método estático `stdout_log`, da mesma classe. Este aceita `*args` e `**kwargs`, para auxiliar.
