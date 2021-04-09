@@ -100,9 +100,10 @@ class AutoRole(commands.Cog):
         '''
 
         mod = dbAutoRole(ctx.guild.id)
-        def_role = discord.utils.get(ctx.guild.roles, id=mod.default_role_id)
 
-        if def_role is not None:
+        if mod is not None and mod.default_role_id is not None:
+            def_role = discord.utils.get(ctx.guild.roles, id=mod.default_role_id)
+
             for member in ctx.guild.members:
                 if len(member.roles) == 1:
                     await member.add_roles(def_role)

@@ -122,20 +122,20 @@ class dbAutoMod(dbManager):
 
         with self.session() as session:
             guild_query = session.query(AdminOptions).filter(
-                AdminOptions.guild_id == self.guild_id)
+                AdminOptions.guild_id == self.guild_id).one_or_none()
 
             # if there are already entries for this guild, updates them
-            if guild_query.count():
-                if guild_query[-1].cursed_words:
+            if guild_query is not None:
+                if guild_query.cursed_words:
 
                     new_words = set(words + guild_query[-1].cursed_words.split(','))
 
-                    guild_query[-1].\
+                    guild_query.\
                         cursed_words = ','.join(new_words)
 
                     session.commit()
                 else:
-                    guild_query[-1].cursed_words = ','.join(set(words))
+                    guild_query.cursed_words = ','.join(set(words))
                     session.commit()
 
             # if there are no entries for this guild, creates entry
@@ -160,21 +160,21 @@ class dbAutoMod(dbManager):
 
         with self.session() as session:
             guild_query = session.query(AdminOptions).filter(
-                AdminOptions.guild_id == self.guild_id)
+                AdminOptions.guild_id == self.guild_id).one_or_none()
 
             # if there are already entries for this guild, updates them
-            if guild_query.count():
-                if guild_query[-1].cursed_words:
+            if guild_query is not None:
+                if guild_query.cursed_words:
 
                     # Removes words
-                    curr_words = guild_query[-1].cursed_words.split(',')
+                    curr_words = guild_query.cursed_words.split(',')
                     for word in words:
                         if word in curr_words:
                             curr_words.remove(word)
                             break
 
                     # Updates table
-                    guild_query[-1].\
+                    guild_query.\
                         cursed_words = ','.join(set(curr_words))
                     session.commit()
 
@@ -193,11 +193,11 @@ class dbAutoMod(dbManager):
 
         with self.session() as session:
             admin_options = session.query(AdminOptions).filter(
-                AdminOptions.guild_id == self.guild_id)
+                AdminOptions.guild_id == self.guild_id).one_or_none()
 
-            if not admin_options.count():
+            if admin_options is None:
                 return ["sem configuração"]
-            if not admin_options[-1].cursed_words:
+            if not admin_options.cursed_words:
                 return ["nenhuma palavra banida"]
 
             return admin_options[-1].cursed_words.split(',')
@@ -239,23 +239,23 @@ class dbAutoRole(dbManager):
 
         '''
 
-        default_role_id = str(default_role_id)
+        str_default_role_id = str(default_role_id)
 
         with self.session() as session:
             guild_query = session.query(AdminOptions).filter(
-                AdminOptions.guild_id == self.guild_id)
+                AdminOptions.guild_id == self.guild_id).one_or_none()
 
             # if there are already entries for this guild, updates them
-            if guild_query.count():
-                if guild_query[-1].default_role_id:
-                    guild_query[-1].default_role_id = default_role_id
+            if guild_query is not None:
+                if guild_query.default_role_id:
+                    guild_query.default_role_id = str_default_role_id
                     session.commit()
 
             # if there are no entries for this guild, creates entry
             else:
                 admin_options = AdminOptions()
                 admin_options.guild_id = self.guild_id
-                admin_options.default_role_id = default_role_id
+                admin_options.default_role_id = str_default_role_id
                 session.add(admin_options)
                 session.commit()
 
@@ -275,11 +275,11 @@ class dbAutoRole(dbManager):
 
         with self.session() as session:
             guild_query = session.query(AdminOptions).filter(
-                AdminOptions.guild_id == self.guild_id)
+                AdminOptions.guild_id == self.guild_id).one_or_none()
 
             # if there are already entries for this guild, updates them
-            if guild_query.count():
-                guild_query[-1].home_msg_id = home_msg_id
+            if guild_query is not None:
+                guild_query.home_msg_id = home_msg_id
                 session.commit()
 
             # if there are no entries for this guild, creates entry
@@ -304,12 +304,13 @@ class dbAutoRole(dbManager):
 
         with self.session() as session:
             guild_query = session.query(AdminOptions).filter(
-                AdminOptions.guild_id == self.guild_id)
+                AdminOptions.guild_id == self.guild_id).one_or_none()
+
 
             # if there are already entries for this guild, updates them
-            if guild_query.count():
-                if guild_query[-1].home_msg_id:
-                    guild_query[-1].home_msg_id = "0"
+            if guild_query is not None:
+                if guild_query.home_msg_id:
+                    guild_query.home_msg_id = "0"
                     session.commit()
 
             # if there are no entries for this guild, creates entry
@@ -331,11 +332,11 @@ class dbAutoRole(dbManager):
 
         with self.session() as session:
             guild_query = session.query(AdminOptions).filter(
-                AdminOptions.guild_id == self.guild_id)
+                AdminOptions.guild_id == self.guild_id).one_or_none()
 
             # if there are already entries for this guild, updates them
-            if guild_query.count():
-                guild_query[-1].ract_role_message_id = str(message_id)
+            if guild_query is not None:
+                guild_query.ract_role_message_id = str(message_id)
                 session.commit()
 
             # if there are no entries for this guild, creates entry
@@ -363,19 +364,19 @@ class dbAutoRole(dbManager):
 
         with self.session() as session:
             guild_query = session.query(AdminOptions).filter(
-                AdminOptions.guild_id == self.guild_id)
+                AdminOptions.guild_id == self.guild_id).one_or_none()
 
             # if there are already entries for this guild, updates them
-            if guild_query.count():
-                if guild_query[-1].react_role_dict:
+            if guild_query is not None:
+                if guild_query.react_role_dict:
 
-                    curr_dict = json.loads(guild_query[-1].react_role_dict)
+                    curr_dict = json.loads(guild_query.react_role_dict)
                     curr_dict.update(react_role_dict)
 
-                    guild_query[-1].react_role_dict = json.dumps(curr_dict)
+                    guild_query.react_role_dict = json.dumps(curr_dict)
                     session.commit()
                 else:
-                    guild_query[-1].react_role_dict = json.dumps(react_role_dict)
+                    guild_query.react_role_dict = json.dumps(react_role_dict)
                     session.commit()
 
             # if there are no entries for this guild, creates entry
@@ -401,14 +402,14 @@ class dbAutoRole(dbManager):
 
         with self.session() as session:
             admin_options = session.query(AdminOptions).filter(
-                AdminOptions.guild_id == self.guild_id)
+                AdminOptions.guild_id == self.guild_id).one_or_none()
 
-            if not admin_options.count():
+            if admin_options is None:
                 return None
-            if not admin_options[-1].default_role_id:
+            if not admin_options.default_role_id:
                 return None
 
-            return int(admin_options[-1].default_role_id)
+            return int(admin_options.default_role_id)
 
     @property
     def home_msg_id(self):
@@ -425,9 +426,9 @@ class dbAutoRole(dbManager):
 
         with self.session() as session:
             admin_options = session.query(AdminOptions).filter(
-                AdminOptions.guild_id == self.guild_id)
+                AdminOptions.guild_id == self.guild_id).one_or_none()
 
-            if not admin_options.count() or admin_options[-1].home_msg_id is None:
+            if admin_options is None or admin_options.home_msg_id is None:
                 return 0
 
             return int(admin_options[-1].home_msg_id)
@@ -448,9 +449,9 @@ class dbAutoRole(dbManager):
 
         with self.session() as session:
             admin_options = session.query(AdminOptions).filter(
-                AdminOptions.guild_id == self.guild_id)
+                AdminOptions.guild_id == self.guild_id).one_or_none()
 
-            return json.loads(admin_options[-1].react_role_dict)
+            return json.loads(admin_options.react_role_dict)
 
 
     @property
@@ -468,9 +469,9 @@ class dbAutoRole(dbManager):
 
         with self.session() as session:
             admin_options = session.query(AdminOptions).filter(
-                AdminOptions.guild_id == self.guild_id)
+                AdminOptions.guild_id == self.guild_id).one_or_none()
 
-            return int(admin_options[-1].ract_role_message_id)
+            return int(admin_options.react_role_message_id)
 
 
 class dbBotConfig(dbManager):
@@ -496,12 +497,12 @@ class dbBotConfig(dbManager):
 
         with self.session() as session:
             conf_query = session.query(BotConfigs).filter(
-                BotConfigs.id == 0)
+                BotConfigs.id == 0).one_or_none()
 
             # if there are already entries, updates them
-            if conf_query.count():
+            if conf_query is not None:
                 self.logger.log("Updating BotConfig update_yt_yaml", lvl=self.logger.INFO)
-                conf_query[-1].yaml_yt_list = json.dumps(yaml_lst)
+                conf_query.yaml_yt_list = json.dumps(yaml_lst)
                 session.commit()
 
             # if there are no entries, creates one
@@ -523,9 +524,10 @@ class dbBotConfig(dbManager):
         '''
 
         with self.session() as session:
-            conf_query = session.query(BotConfigs).order_by('id')
+            conf_query = session.query(BotConfigs).filter(
+                BotConfigs.id == 0).one_or_none()
 
-            if conf_query.count():
-                return json.loads(conf_query[-1].yaml_yt_list)
+            if conf_query is not None:
+                return json.loads(conf_query.yaml_yt_list)
 
             return None
