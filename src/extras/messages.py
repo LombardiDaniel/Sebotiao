@@ -74,6 +74,7 @@ class MessageFormater:
                 message += f"> `{name}`: {module['msg']}\n"
 
             message += '\nEnvie `tiao ajuda CATEGORIA` para mais detalhes\n'
+            message += "\nPode-se usar `tiao ping` para pingar o servidor\n"
 
         message += "\n> Obs: Lembre de utilizar `tiao ` antes de qualquer comando.\n"
 

@@ -66,6 +66,10 @@ class TiozaoZap(commands.Cog):
         )
         await ctx.message.channel.send(f'Se liga nesse audio... {player.title}')
 
+        # Disconnects after 5 seconds of audio ending
+        while voice_client.is_playing():
+            await sleep(5)
+        await voice_client.disconnect()
 
 def setup(client):
     '''
