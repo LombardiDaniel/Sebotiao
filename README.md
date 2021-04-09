@@ -64,7 +64,7 @@ Pessoalmente, recomendo que utilize docker. Nesse caso, utilize o [docker-compos
 
 ### Organização do Projeto
 
-De forma geral, o arquivo `src/main.py` roda o bot, utilizando os arquivos da pasta [`cogs/`](cogs/) (leia mais sobre cogs [aqui](https://discordpy.readthedocs.io/en/latest/ext/commands/cogs.html)). As interações com a database são feitas pelo arquivo [`src/utils/dbManager.py`](src/utils/dbManager.py), que simplifica o acesso utilizando a biblioteca sqlalchemy. Os modelos para criação das tabelas ficam no arquivo [`src/models.py`](src/models.py).
+De forma geral, o arquivo `src/main.py` roda o bot, utilizando os arquivos da pasta [`src/cogs/`](src/cogs/) (leia mais sobre cogs [aqui](https://discordpy.readthedocs.io/en/latest/ext/commands/cogs.html)). As interações com a database são feitas pelo arquivo [`src/utils/dbManager.py`](src/utils/dbManager.py), que simplifica o acesso utilizando a biblioteca sqlalchemy. Os modelos para criação das tabelas ficam no arquivo [`src/models.py`](src/models.py).
 
 #### Variáveis de Ambiente
 

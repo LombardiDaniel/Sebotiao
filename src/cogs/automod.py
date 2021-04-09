@@ -40,7 +40,7 @@ class AutoModerator(commands.Cog):
         '''
         Pings the bot server.
         '''
-        await ctx.channel.send(f"Latency: {round(self.client.latency * 1000)}ms")
+        await ctx.channel.send(f"Latency: `{round(self.client.latency * 1000)}ms`")
 
     @commands.command(name='ajuda', aliases=['ajuda noix'])
     async def ajuda(self, ctx, our_input=None):
