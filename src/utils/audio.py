@@ -59,6 +59,30 @@ class YTDLSource(discord.PCMVolumeTransformer):
 class YoutubeHelper:
 
     @staticmethod
+    def filter_videos_input_from_api_call(our_input):
+        '''
+        Filters out each video from youtube playlist.
+        Args:
+            - our_input (str) : url of video/playlist.
+        Returns:
+            - lst_urls (lst) : list of videos included in url passed as input. Can be:
+                - empty :               invalid link
+                - single element:       single video url
+                - multiple elements:    urls of videos in playlist
+        '''
+
+        if our_input[0:24] != 'https://www.youtube.com/':
+            return []
+
+        lst_urls = YoutubeHelper._playlist_to_list(our_input) if \
+            '&list=' in our_input else [our_input]
+
+        return lst_urls
+
+
+
+
+    @staticmethod
     def get_urls_list():
         '''
         Controls the buffer to reduce number of youtubeAPI calls (max 1 per day).
@@ -110,6 +134,30 @@ class YoutubeHelper:
     @staticmethod
     def _get_channel_id(name):
         pass
+
+    @staticmethod
+    def _playlist_to_list(url):
+        '''
+        '''
+
+        api_key = os.getenv('YT_API_KEY')
+
+        playlist_id = url.split("&list=")[-1]
+        count = 20
+
+        videos_url = ""
+        videos_url += f"https://www.googleapis.com/youtube/v3/playlistItems?key={api_key}"
+        videos_url += f"&playlistId={playlist_id}&part=contentDetails&maxResults={count}"
+
+        request = requests.get(videos_url).json()
+
+        videos_ids = []
+        for item in request['items']:
+            videos_ids.append(item['contentDetails']['videoId'])
+
+        videos_urls = [f"https://www.youtube.com/watch?v={id}" for id in videos_ids]
+
+        return videos_urls
 
 
     @staticmethod

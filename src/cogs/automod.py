@@ -57,6 +57,13 @@ class AutoModerator(commands.Cog):
         '''
         await ctx.channel.send(embed=MessageFormater.development())
 
+        msg = ""
+        msg += "O Projeto deste bot é completamente open-source! "
+        msg += "Sinta-se a vontade para dar uma olhada no código, pedir novas features, "
+        msg += "reportar bugs, ou até colaborar. Sua opinião é sempre bem-vinda!"
+
+        await ctx.channel.send(msg)
+
     @commands.command(name='set_cursed_words', aliases=[
         'set_cursed_word', 'add_cursed_words', 'add_cursed_word',
     ])

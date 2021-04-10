@@ -1,3 +1,7 @@
+from secrets import choice
+
+from extras import constants
+
 
 def admin_only(command_func):
     '''
@@ -10,6 +14,21 @@ def admin_only(command_func):
 
         if not ctx.author.guild_permissions.administrator:
             await ctx.message.channel.send("vc n pode pedir isso :joy: :joy: :joy:")
+            return
+
+        return await command_func(self, ctx, *args, **kwargs)
+
+    return wrap
+
+
+def in_voice_chat_only(command_func):
+    '''
+    Decorator to only call the function if the user (caller) is in a voice chat.
+    '''
+    async def wrap(self, ctx, *args, **kwargs):
+
+        if not ctx.message.author.voice:
+            await ctx.message.channel.send(choice(constants.NEGATIVE_RESPONSES))
             return
 
         return await command_func(self, ctx, *args, **kwargs)

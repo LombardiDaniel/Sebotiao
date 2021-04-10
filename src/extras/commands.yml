@@ -69,5 +69,25 @@ tiozao:
     commands:
         audio_do_zap:
             aliases: "zap,audio,audio_zap"
-            msg: "Toca um audio do zap brabo pro pessoal ouvir"
+            msg: "Toca um audio do zap brabo pro pessoal ouvir. Espere o audio acabar para pedir o próximo (nao suporta fila de audios)."
+            args: "Nenhum"
+
+        play:
+            aliases: "toca,musica"
+            msg: "Toca o url especificado (youtube) na sala de voz do usuário. Suporta fila de videos."
+            args: "`URL`"
+
+        limpa_fila:
+            aliases: "limpa,clear_queue,clear"
+            msg: "Limpa a fila de videos e playlists do youtube, também encerra a musica atual."
+            args: "Nenhum"
+
+        proximo:
+            aliases: "skip,next"
+            msg: "Vai para o proximo video da queue."
+            args: "Nenhum"
+
+        sai:
+            aliases: "exit,stop,para,encerra"
+            msg: "Encerra a reprodução e limpa a queue."
             args: "Nenhum"
