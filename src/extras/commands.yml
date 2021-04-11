@@ -83,7 +83,7 @@ tiozao:
             args: "Nenhum"
 
         proximo:
-            aliases: "skip,next"
+            aliases: "pula,skip,next"
             msg: "Vai para o proximo video da queue."
             args: "Nenhum"
 

@@ -54,7 +54,7 @@ class TiozaoZap(commands.Cog):
                     del self.return_chats[guild_id]
                     del self.queues[guild_id]
 
-    @tasks.loop(seconds=0.5)
+    @tasks.loop(seconds=0.1)
     async def check_next_in_queue(self):
         '''
         Task to check the next song in queue.
@@ -238,7 +238,7 @@ class TiozaoZap(commands.Cog):
             await ctx.message.channel.send(choice(constants.NEGATIVE_RESPONSES))
 
 
-    @commands.command(name='proximo', aliases=['skip', 'next'])
+    @commands.command(name='proximo', aliases=['pula', 'skip', 'next'])
     @decorators.in_voice_chat_only
     @commands.guild_only()
     async def proximo(self, ctx):

@@ -33,8 +33,10 @@ class dbManager(ABC):
 
     def __init__(self, guild_id):
         self.logger = DockerLogger(prefix='dbManager', lvl=DockerLogger.INFO)
+
         self.log_handler = logging.FileHandler('./logs/sqlalchemy.log', mode='a+')
         self.log_handler.setLevel(logging.INFO)
+        logging.getLogger('sqlalchemy').addHandler(self.log_handler)
 
         self.guild_id = str(guild_id)
 
@@ -77,7 +79,7 @@ class dbManager(ABC):
 
             self.engine = create_engine(
                 f'postgresql+psycopg2://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}',
-                echo=True
+                echo=False
             )
             self.logger.log("Connected to PostgreSQL",
                 lvl=self.logger.INFO)
