@@ -121,6 +121,9 @@ class YoutubeHelper:
         if (now - date_time_obj).days > 1:
             logger.log(lvl=logger.INFO, msg="Buffer Expired, making API Call")
 
+            print(new_videos_lst)
+            print(videos_lst)
+
             new_videos_lst = YoutubeHelper._make_api_call()
             new_videos_lst = set(videos_lst + new_videos_lst)
 
