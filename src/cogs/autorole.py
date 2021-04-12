@@ -183,10 +183,12 @@ class AutoRole(commands.Cog):
     # AUTO:
     @commands.Cog.listener()
     @commands.guild_only()
-    async def on_reaction_add(self, ctx, reaction, member):
+    async def on_reaction_add(self, ctx, reaction):
         '''
         Adds members to def_role when they react to home_msg.
         '''
+
+        member = ctx.author
 
         if member.bot:
             return
