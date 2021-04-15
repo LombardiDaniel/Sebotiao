@@ -130,7 +130,7 @@ class dbAutoMod(dbManager):
             if guild_query is not None:
                 if guild_query.cursed_words:
 
-                    new_words = set(words + guild_query[-1].cursed_words.split(','))
+                    new_words = set(words + guild_query.cursed_words.split(','))
 
                     guild_query.\
                         cursed_words = ','.join(new_words)
