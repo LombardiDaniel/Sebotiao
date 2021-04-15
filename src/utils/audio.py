@@ -116,7 +116,7 @@ class YoutubeHelper:
         for key in contents.keys():
             date_time_obj = datetime.strptime(key, '%Y-%m-%d')
 
-        videos_lst = list(contents.values())
+        videos_lst = list(contents.values())[0]
 
         if (now - date_time_obj).days > 1:
             logger.log(lvl=logger.INFO, msg="Buffer Expired, making API Call")

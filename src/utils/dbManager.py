@@ -202,7 +202,7 @@ class dbAutoMod(dbManager):
             if not admin_options.cursed_words:
                 return ["nenhuma palavra banida"]
 
-            return admin_options[-1].cursed_words.split(',')
+            return admin_options.cursed_words.split(',')
 
 
 class dbAutoRole(dbManager):
@@ -433,7 +433,7 @@ class dbAutoRole(dbManager):
             if admin_options is None or admin_options.home_msg_id is None:
                 return 0
 
-            return int(admin_options[-1].home_msg_id)
+            return int(admin_options.home_msg_id)
 
     @property
     def react_role_dict(self):
@@ -522,7 +522,7 @@ class dbBotConfig(dbManager):
         '''
         Gets the yaml format from memory.
         Returns:
-            - yt_yaml (str): parsed json dictionary.
+            - yt_yaml (dict): parsed json dictionary.
         '''
 
         with self.session() as session:
