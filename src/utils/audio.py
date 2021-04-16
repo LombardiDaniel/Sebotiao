@@ -122,7 +122,7 @@ class YoutubeHelper:
             logger.log(lvl=logger.INFO, msg="Buffer Expired, making API Call")
 
             new_videos_lst = YoutubeHelper._make_api_call()
-            new_videos_lst = set(videos_lst + new_videos_lst)
+            new_videos_lst = list(set(videos_lst + new_videos_lst))
 
             new_contents = {date_now:new_videos_lst}
             bot_confs.update_yt_yaml(new_contents)
