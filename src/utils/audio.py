@@ -1,8 +1,8 @@
 import os
 import asyncio
-import requests
-
 from datetime import datetime
+
+import requests
 
 import discord
 import youtube_dl
@@ -35,6 +35,7 @@ ffmpeg_options = {
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
 class YTDLSource(discord.PCMVolumeTransformer):
+    '''Needed for playback'''
     def __init__(self, source, *, data, volume=0.5):
         super().__init__(source, volume)
 
@@ -45,6 +46,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
     @classmethod
     async def from_url(cls, url, *, loop=None, stream=False):
+        '''Plays audio from video URL.'''
         loop = loop or asyncio.get_event_loop()
         data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
 
@@ -57,6 +59,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
 
 class YoutubeHelper:
+    '''Utils for youtube related functionality.'''
 
     @staticmethod
     def filter_videos_input_from_api_call(our_input):
