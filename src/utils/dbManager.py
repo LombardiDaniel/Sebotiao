@@ -36,7 +36,7 @@ class dbManager(ABC):
 
         self.log_handler = logging.FileHandler('./logs/sqlalchemy.log', mode='a+')
         self.log_handler.setLevel(logging.INFO)
-        self.db_logger = logging.getLogger('sqlalchemy').addHandler(self.log_handler)
+        self.db_logger = logging.getLogger('sqlalchemy')
         self.db_logger.addHandler(self.log_handler)
         self.db_logger.setLevel(logging.INFO)
 
