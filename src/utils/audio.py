@@ -133,7 +133,7 @@ class YoutubeHelper:
             return new_videos_lst
 
         logger.log(lvl=logger.INFO, msg="Using buffer")
-        return videos_lst[0]
+        return videos_lst
 
     @staticmethod
     def _get_channel_id(name):

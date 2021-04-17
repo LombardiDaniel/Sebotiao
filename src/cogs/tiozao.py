@@ -27,6 +27,7 @@ class TiozaoZap(commands.Cog):
         voice_client = discord.utils.get(self.client.voice_clients, guild=ctx.guild)
 
         video_url = choice(YoutubeHelper.get_urls_list())
+
         async with ctx.typing():
             player = await YTDLSource.from_url(video_url, loop=self.client.loop)
             voice_client.play(
