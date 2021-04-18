@@ -475,7 +475,7 @@ class dbAutoRole(dbManager):
             admin_options = session.query(AdminOptions).filter(
                 AdminOptions.guild_id == self.guild_id).one_or_none()
 
-            return int(admin_options.react_role_message_id)
+            return int(admin_options.react_role_message_id) if admin_options is not None else None
 
 
 class dbBotConfig(dbManager):

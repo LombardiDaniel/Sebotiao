@@ -11,7 +11,7 @@ class Colours:
     yellow = 0xf9f586
 
 
-COMMAND_PREFIXES = ['tiao ', 'ei ', 'psiu ', 'Tiao']
+COMMAND_PREFIXES = ['tiao ', 'ei ', 'psiu ', 'Tiao', 'tião']
 
 RESPOSTA_CHINGO = [
     "Bolsonaro e seus familiares.estam trabalhando o melhor que podem.nao julgue para nao ser julgado BOM DIA",

@@ -127,14 +127,15 @@ class AutoModerator(commands.Cog):
         if message.author.bot:
             return
 
-        # Cancels the request if the mwessage sent was a command.
-        if any(word in message.content for word in constants.COMMAND_PREFIXES):
+        # Cancels the request if the message sent was a command.
+        if message.content.split(' ', 1)[0] + ' ' in constants.COMMAND_PREFIXES:
             return
 
         # cursed_words
         mod = dbAutoMod(message.guild.id)
-        if any(word in message.content.lower().split() for word in mod.cursed_words):
-            await message.channel.send(MessageFormater.cursed_words_msg(message.author.id))
+        if mod and mod.cursed_words:
+            if any(word in message.content.lower().split() for word in mod.cursed_words):
+                await message.channel.send(MessageFormater.cursed_words_msg(message.author.id))
 
 
     @commands.Cog.listener()

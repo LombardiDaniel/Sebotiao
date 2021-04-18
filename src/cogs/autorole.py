@@ -183,12 +183,10 @@ class AutoRole(commands.Cog):
     # AUTO:
     @commands.Cog.listener()
     @commands.guild_only()
-    async def on_reaction_add(self, ctx, reaction):
+    async def on_reaction_add(self, reaction, member):
         '''
         Adds members to def_role when they react to home_msg.
         '''
-
-        member = ctx.author
 
         if member.bot:
             return
@@ -196,19 +194,19 @@ class AutoRole(commands.Cog):
         mod = dbAutoRole(member.guild.id)
         def_role = discord.utils.get(member.guild.roles, id=mod.default_role_id)
 
-
         # For the home_msg
-        if mod.home_msg_id:
-            if def_role is not None and reaction.message.id == mod.home_msg_id:
-                await member.add_roles(def_role)
-                mod.logger.log(
-                    f'AutoMod set autoRole for {member.id} @ {member.guild.id}')
+        if mod is not None:
+            if mod.home_msg_id:
+                if def_role is not None and reaction.message.id == mod.home_msg_id:
+                    await member.add_roles(def_role)
+                    mod.logger.log(
+                        f'AutoMod set autoRole for {member.id} @ {member.guild.id}')
 
-        if mod.react_role_msg_id == ctx.message.id:
-            if reaction.emoji[-1] in mod.react_role_dict.keys():
-                role = discord.utils.get(member.guild.roles,
-                                         id=mod.react_role_dict[f"{reaction.emoji[-1]}"])
-                await member.add_roles(role)
+            if mod.react_role_msg_id == reaction.message.id:
+                if reaction.emoji[-1] in mod.react_role_dict.keys():
+                    role = discord.utils.get(member.guild.roles,
+                                             id=mod.react_role_dict[f"{reaction.emoji[-1]}"])
+                    await member.add_roles(role)
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
