@@ -94,8 +94,9 @@ class AutoModerator(commands.Cog):
 
         mod = dbAutoMod(ctx.guild.id)
 
-        for word in mod.cursed_words:
-            await ctx.message.channel.send(word)
+        if (cursed_words_buffer := mod.cursed_words) is not None:
+            for word in cursed_words_buffer:
+                await ctx.message.channel.send(word)
 
     @commands.command(name='remove_cursed_words', aliases=[
         'uncurse_words', 'remove_cursed_word', 'uncurse_word'

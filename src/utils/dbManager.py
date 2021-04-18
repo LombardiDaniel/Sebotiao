@@ -169,7 +169,6 @@ class dbAutoMod(dbManager):
             # if there are already entries for this guild, updates them
             if guild_query is not None:
                 if guild_query.cursed_words:
-
                     # Removes words
                     curr_words = guild_query.cursed_words.split(',')
                     for word in words:
@@ -200,9 +199,9 @@ class dbAutoMod(dbManager):
                 AdminOptions.guild_id == self.guild_id).one_or_none()
 
             if admin_options is None:
-                return ["sem configuração"]
+                return None
             if not admin_options.cursed_words:
-                return ["nenhuma palavra banida"]
+                return None
 
             return admin_options.cursed_words.split(',')
 

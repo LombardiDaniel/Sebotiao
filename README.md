@@ -55,7 +55,7 @@ Pessoalmente, recomendo que utilize docker. Nesse caso, utilize o [docker-compos
 
 ##### Direto no Python
 
--   [Python 3.7](https://www.python.org)
+-   [Python 3.8](https://www.python.org)
 -   [Virtual Env](https://pypi.org/project/virtualenv/)
 -   Bibliotecas estão em [requirements.txt](https://github.com/LombardiDaniel/Sebotiao/blob/master/requirements.txt)
 -   [Opuc Codec](https://opus-codec.org)
