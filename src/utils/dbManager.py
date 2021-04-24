@@ -32,13 +32,16 @@ class dbManager(ABC):
     '''
 
     def __init__(self, guild_id):
-        self.logger = DockerLogger(prefix='dbManager', lvl=DockerLogger.INFO)
+        self.logger = logging.getLogger('sqlalchemy')
+        file_handler = logging.FileHandler('./logs/sqlalchemy.log', mode='a+')
+        file_handler.setLevel(logging.INFO)
+        self.logger.addHandler(file_handler)
 
-        self.log_handler = logging.FileHandler('./logs/sqlalchemy.log', mode='a+')
-        # self.log_handler.setLevel(logging.INFO)
-        self.db_logger = logging.getLogger('sqlalchemy')
-        self.db_logger.addHandler(self.log_handler)
-        # self.db_logger.setLevel(logging.INFO)
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging.WARNING)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        file_handler.setFormatter(formatter)
+        console_handler.setFormatter(formatter)
 
         self.guild_id = str(guild_id)
 
@@ -61,20 +64,19 @@ class dbManager(ABC):
                 'sqlite:////devdb/sqlite.db?check_same_thread=False',
                 echo=True
             )
-            self.logger.log("Connected to SQLITE DB (Do NOT use in production)",
-                lvl=self.logger.WARNING)
+            self.logger.warning("Connected to SQLITE DB (Do NOT use in production)")
 
         else:
             # Raises an error if any of the needed env vars were not declared
             if any(not var for var in [db_user, db_pass, db_name, db_port]):
-                self.logger.log(
-                f"""Missing ENV VARS:
-                    POSTGRES_USER: '{db_user}',
-                    POSTGRES_PASSWORD: '{db_pass}',
-                    POSTGRES_DB: '{db_name}',
-                    DB_HOST: '{db_host}',
-                    POSTGRES_PORT: '{db_port}'
-                    """, lvl=self.logger.ERROR)
+                self.logger.error(
+                """Missing ENV VARS:
+                    POSTGRES_USER: '%s',
+                    POSTGRES_PASSWORD: '%s',
+                    POSTGRES_DB: '%s',
+                    DB_HOST: '%s',
+                    POSTGRES_PORT: '%s'
+                    """, db_user, db_pass, db_name, db_host, db_port)
                 raise NameError(
                     f"""Missing ENV VARS:
                         POSTGRES_USER: '{db_user}',
@@ -84,8 +86,7 @@ class dbManager(ABC):
                         POSTGRES_PORT: '{db_port}'
                         """)
 
-            self.log_handler.setLevel(logging.WARNING)
-            self.db_logger.setLevel(logging.WARNING)
+            self.logger.setLevel(logging.WARNING)
 
             self.engine = create_engine(
                 f'postgresql+psycopg2://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}',
@@ -509,14 +510,13 @@ class dbBotConfig(dbManager):
 
             # if there are already entries, updates them
             if conf_query is not None:
-                self.logger.log("Updating BotConfig update_yt_yaml", lvl=self.logger.INFO)
+                self.logger.info("Updating BotConfig update_yt_yaml")
                 conf_query.yaml_yt_list = json.dumps(yaml_lst)
                 session.commit()
 
             # if there are no entries, creates one
             else:
-                self.logger.log("Adding a new BotConfig entry from update_yt_yaml (api call)",
-                    lvl=self.logger.WARNING)
+                self.logger.info("Adding a new BotConfig entry from update_yt_yaml (api call)")
                 conf_new = BotConfigs()
                 conf_new.id = 0
                 conf_new.yaml_yt_list = json.dumps(yaml_lst)

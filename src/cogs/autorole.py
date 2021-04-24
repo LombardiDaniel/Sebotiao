@@ -1,10 +1,10 @@
+import logging
 import re
 from secrets import choice
 
 import discord
 from discord.ext import commands
 
-from utils.docker import DockerLogger
 from utils.dbManager import dbAutoRole
 from utils.decorators import admin_only
 from extras import constants
@@ -18,7 +18,16 @@ class AutoRole(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-        self.logger = DockerLogger(lvl=DockerLogger.INFO, prefix='AutoRole')
+
+        self.logger = logging.getLogger('AutoRole')
+        file_handler = logging.FileHandler('logs/autorole.log')
+        file_handler.setLevel(logging.DEBUG)
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging.WARNING)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        file_handler.setFormatter(formatter)
+        console_handler.setFormatter(formatter)
+
 
     @commands.command(name='set_default_role', aliases=[
         'set_def_role', 'update_def_role', 'update_default_role'
@@ -35,9 +44,10 @@ class AutoRole(commands.Cog):
         mod = dbAutoRole(ctx.guild.id)
         mod.update_default_role(role.id)
 
-        mod.logger.log(
-            f'{ctx.guild.id} - {ctx.message.author.id} set default role as {role}',
-            lvl=self.logger.INFO)
+        mod.logger.info(
+            '%d - %d set default role as %d',
+            ctx.guild.id, ctx.message.author.id, role.id)
+
         await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
 
     @commands.command(name='set_welcome_channel', aliases=[

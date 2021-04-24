@@ -1,3 +1,4 @@
+import logging
 from secrets import choice
 from asyncio import sleep
 
@@ -6,7 +7,6 @@ from discord.ext import tasks, commands
 
 from extras import constants
 from utils.audio import YoutubeHelper, YTDLSource
-from utils.docker import DockerLogger
 from utils import decorators
 
 
@@ -17,12 +17,22 @@ class TiozaoZap(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-        self.logger = DockerLogger(lvl=DockerLogger.INFO, prefix='TiozaoZap')
+
+        self.logger = logging.getLogger('TiozaoZap')
+        file_handler = logging.FileHandler('logs/tiaozap.log')
+        file_handler.setLevel(logging.DEBUG)
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging.WARNING)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        file_handler.setFormatter(formatter)
+        console_handler.setFormatter(formatter)
 
     async def _play_zap(self, ctx):
         '''
         Plays the zap audio.
         '''
+
+        self.logger.debug('playing audio')
 
         voice_client = discord.utils.get(self.client.voice_clients, guild=ctx.guild)
 
@@ -50,6 +60,7 @@ class TiozaoZap(commands.Cog):
         # bozo xingo
         if any(word in message.content.lower() for word in constants.BOZO_CHINGO_TRIGGERS):
             choice(constants.RESPOSTA_CHINGO)
+            self.logger.debug('Xingo triggered')
             await message.channel.send(choice(constants.RESPOSTA_CHINGO))
 
     @commands.command(name='audio_do_zap', aliases=['zap', 'audio', 'audio_zap'])
@@ -70,10 +81,7 @@ class TiozaoZap(commands.Cog):
 
         await self._play_zap(ctx)
 
-        self.logger.log(
-            f'{ctx.guild.id} - {ctx.message.author.id} requested ZAP_AUDIO',
-            lvl=self.logger.INFO
-        )
+        self.logger.info('%d - %d requested ZAP_AUDIO', ctx.guild.id, ctx.message.author.id)
 
         # Disconnects after 5 seconds of audio ending
         while voice_client.is_playing():
