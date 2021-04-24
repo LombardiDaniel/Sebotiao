@@ -36,7 +36,8 @@ class AutoRole(commands.Cog):
         mod.update_default_role(role.id)
 
         mod.logger.log(
-            f'{ctx.guild.id} - {ctx.message.author.name} set default role as {role}')
+            f'{ctx.guild.id} - {ctx.message.author.id} set default role as {role}',
+            lvl=self.logger.INFO)
         await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
 
     @commands.command(name='set_welcome_channel', aliases=[

@@ -80,7 +80,8 @@ class AutoModerator(commands.Cog):
         mod.add_cursed_words(words)
 
         self.logger.log(
-            f'{ctx.guild.id} - {ctx.message.author.name} added cursed word(s): {our_input}')
+            f'{ctx.guild.id} - {ctx.message.author.id} added cursed word(s): {our_input}',
+            lvl=self.logger.INFO)
         await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
 
     @commands.command(name='list_cursed_words', aliases=[
@@ -114,7 +115,8 @@ class AutoModerator(commands.Cog):
         mod.remove_cursed_words(words)
 
         self.logger.log(
-            f'{ctx.guild.id} - {ctx.message.author.name} removed cursed word(s): {our_input}')
+            f'{ctx.guild.id} - {ctx.message.author.id} removed cursed word(s): {our_input}',
+            lvl=self.logger.INFO)
         await ctx.message.channel.send(choice(constants.POSITIVE_RESPONSES))
 
     # AUTO:

@@ -35,10 +35,10 @@ class dbManager(ABC):
         self.logger = DockerLogger(prefix='dbManager', lvl=DockerLogger.INFO)
 
         self.log_handler = logging.FileHandler('./logs/sqlalchemy.log', mode='a+')
-        self.log_handler.setLevel(logging.INFO)
+        # self.log_handler.setLevel(logging.INFO)
         self.db_logger = logging.getLogger('sqlalchemy')
         self.db_logger.addHandler(self.log_handler)
-        self.db_logger.setLevel(logging.INFO)
+        # self.db_logger.setLevel(logging.INFO)
 
         self.guild_id = str(guild_id)
 
@@ -53,12 +53,17 @@ class dbManager(ABC):
 
         # If debug mode, creates local sqlite database
         if int(os.environ.get('DEBUG')):
+
+            self.log_handler.setLevel(logging.INFO)
+            self.db_logger.setLevel(logging.INFO)
+
             self.engine = create_engine(
                 'sqlite:////devdb/sqlite.db?check_same_thread=False',
                 echo=True
             )
             self.logger.log("Connected to SQLITE DB (Do NOT use in production)",
                 lvl=self.logger.WARNING)
+
         else:
             # Raises an error if any of the needed env vars were not declared
             if any(not var for var in [db_user, db_pass, db_name, db_port]):
@@ -79,14 +84,14 @@ class dbManager(ABC):
                         POSTGRES_PORT: '{db_port}'
                         """)
 
+            self.log_handler.setLevel(logging.WARNING)
+            self.db_logger.setLevel(logging.WARNING)
+
             self.engine = create_engine(
                 f'postgresql+psycopg2://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}',
                 echo=False
             )
-            self.logger.log("Connected to PostgreSQL",
-                lvl=self.logger.INFO)
 
-        logging.getLogger('sqlalchemy').addHandler(self.log_handler)
         Base.metadata.create_all(bind=self.engine)
         self.session = sessionmaker(bind=self.engine)
 
@@ -510,7 +515,7 @@ class dbBotConfig(dbManager):
 
             # if there are no entries, creates one
             else:
-                self.logger.log("Addin a new BotConfig entry from update_yt_yaml",
+                self.logger.log("Adding a new BotConfig entry from update_yt_yaml (api call)",
                     lvl=self.logger.WARNING)
                 conf_new = BotConfigs()
                 conf_new.id = 0
