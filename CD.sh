@@ -20,7 +20,7 @@ logthis() {
 latest=$(git pull origin)
 
 if [[ $latest == "Already up to date." ]]; then
-        logthis "Already up to date. Nothing to do;"
+#        logthis "Already up to date. Nothing to do;"
 else
         logthis "Update available. Executing update command;"
         eval $COMMAND
