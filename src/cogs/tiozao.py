@@ -48,9 +48,9 @@ class TiozaoZap(commands.Cog):
             return
 
         # bozo xingo
-        if any(word in message.content.lower() for word in constants.BOZO_CHINGO_TRIGGERS):
-            choice(constants.RESPOSTA_CHINGO)
-            await message.channel.send(choice(constants.RESPOSTA_CHINGO))
+        if any(word in message.content.lower() for word in constants.BOZO_XINGO_TRIGGERS):
+            choice(constants.RESPOSTA_XINGO)
+            await message.channel.send(choice(constants.RESPOSTA_XINGO))
 
     @commands.command(name='audio_do_zap', aliases=['zap', 'audio', 'audio_zap'])
     @decorators.in_voice_chat_only

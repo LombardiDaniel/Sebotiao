@@ -13,7 +13,7 @@ class Colours:
 
 COMMAND_PREFIXES = ['tiao ', 'Tiao ', 'tião ', 'Tião ']
 
-RESPOSTA_CHINGO = [
+RESPOSTA_XINGO = [
     "Bolsonaro e seus familiares.estam trabalhando o melhor que podem.nao julgue para nao ser julgado BOM DIA",
     "Não conheço um eleitor do Bolsonaro que esteja arrependido, pelo contrário, já iniciamos a campanha para 2022. " +
         "É o melhor presidente de todos os tempos.",
@@ -21,7 +21,7 @@ RESPOSTA_CHINGO = [
     "Ah é? E o Lula? E o PT?",
 ]
 
-BOZO_CHINGO_TRIGGERS = [
+BOZO_XINGO_TRIGGERS = [
     "bolsonaro",
     "bozo",
     "biroliro",
