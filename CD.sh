@@ -5,7 +5,7 @@ PRJ_PATH=`dirname $SCRIPT`
 
 cd $PRJ_PATH
 
-IMAGE="lombardi/reddbot"
+IMAGE="lombardi/Sebotiao"
 FETCH="git fetch"
 PULL="git pull origin"
 COMPOSE_PATH="/usr/local/bin/docker-compose"
