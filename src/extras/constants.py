@@ -30,6 +30,9 @@ BOZO_XINGO_TRIGGERS = [
     "bonoro",
     "boliroliro",
     "bolonoro",
+    "lula",
+    "pt",
+    "boulos",
 ]
 
 POSITIVE_RESPONSES = [
@@ -43,5 +46,7 @@ POSITIVE_RESPONSES = [
 NEGATIVE_RESPONSES = [
     "sei nao ein",
     ":poop: :poop: :poop:",
-    ":thumbsdown:"
+    ":thumbsdown:",
 ]
+
+SUS_VIDEO_URL = "https://www.youtube.com/watch?v=Regpv0xU3ZQ"

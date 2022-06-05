@@ -71,3 +71,8 @@ tiozao:
             aliases: "zap,audio,audio_zap"
             msg: "Toca um audio do zap brabo pro pessoal ouvir. Espere o audio acabar para pedir o próximo (nao suporta fila de audios)."
             args: "Nenhum"
+
+        sus_sound_effect:
+            aliases: "sus"
+            msg: "Toca o efeito de sus do amongus"
+            args: "Nenhum"
